@@ -24,7 +24,7 @@ class OAuthForm extends StatelessWidget {
       }
     }
 
-    ;
+    
     return Column(
       children: [
         const SizedBox(height: 20),

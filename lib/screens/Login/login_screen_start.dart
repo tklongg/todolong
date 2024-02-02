@@ -12,16 +12,53 @@ class LoginScreenStart extends StatefulWidget {
   State<LoginScreenStart> createState() => _LoginScreenStartState();
 }
 
-
-
 class _LoginScreenStartState extends State<LoginScreenStart> {
-  bool isMoreOptionsVisible = false;
+  // bool isMoreOptionsVisible = false;
+  final moreOptionsKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     double screenHeight = ScreenUtil.screenHeight(context);
     double screenWidth = ScreenUtil.screenWidth(context);
-    double getFontSize(double size) => size * screenWidth / 414;
+
+    void showMoreOptions(BuildContext context) async {
+      final RenderBox renderBox =
+          moreOptionsKey.currentContext!.findRenderObject() as RenderBox;
+      final position = renderBox.localToGlobal(Offset.zero);
+      final result = await showMenu(
+        context: context,
+        position: RelativeRect.fromLTRB(
+            position.dx, position.dy, position.dx, position.dy),
+        items: [
+          const PopupMenuItem(
+            value: 'login_facebook',
+            child: Text('Đăng nhập với Facebook'),
+          ),
+          const PopupMenuItem(
+            value: 'login_email',
+            child: Text('Đăng nhập với Email'),
+          ),
+          const PopupMenuItem(
+            value: 'register_email',
+            child: Text('Đăng ký với Email'),
+          ),
+        ],
+      );
+      if (result != null) {
+        print("null");
+        if (result == 'login_facebook') {
+          // Xử lý khi nhấn vào Đăng nhập với Facebook
+          print("login_face");
+        } else if (result == 'login_email') {
+          print(3);
+          // Xử lý khi nhấn vào Đăng nhập với Email
+        } else if (result == 'register_email') {
+          print(4);
+          // Xử lý khi nhấn vào Đăng ký với Email
+        }
+      }
+    }
+
     return Scaffold(
         body: SafeArea(
       child: Column(
@@ -35,6 +72,7 @@ class _LoginScreenStartState extends State<LoginScreenStart> {
           _buildSlogan(),
           _buildOauthForm(),
           InkWell(
+            key: moreOptionsKey,
             child: const Text('More sign-in options',
                 style: TextStyle(
                   fontFamily: 'Roboto',
@@ -42,8 +80,16 @@ class _LoginScreenStartState extends State<LoginScreenStart> {
                   fontSize: 14,
                   decoration: TextDecoration.underline,
                 )),
-            onTap: () => {},
-          )
+            onTap: () {
+              // showModalBottomSheet<void>(
+              //   context: context,
+              //   builder: (BuildContext context) {
+              //     return _buildModalOptions(context);
+              //   },
+              // );
+              showMoreOptions(context);
+            },
+          ),
         ],
       ),
     ));
