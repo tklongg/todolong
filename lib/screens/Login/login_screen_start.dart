@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:todolong/utils/oauth/sign_in_google.dart';
 import 'package:todolong/utils/screen.dart';
+import 'package:todolong/widgets/auth/login_widget.dart';
 
 // <div>Icons made from <a href="https://www.onlinewebfonts.com/icon">svg icons</a>is licensed by CC BY 4.0</div>
 class LoginScreenStart extends StatefulWidget {
@@ -21,78 +22,109 @@ class _LoginScreenStartState extends State<LoginScreenStart> {
     double screenHeight = ScreenUtil.screenHeight(context);
     double screenWidth = ScreenUtil.screenWidth(context);
 
-    void showMoreOptions(BuildContext context) async {
-      final RenderBox renderBox =
-          moreOptionsKey.currentContext!.findRenderObject() as RenderBox;
-      final position = renderBox.localToGlobal(Offset.zero);
-      final result = await showMenu(
-        context: context,
-        position: RelativeRect.fromLTRB(
-            position.dx, position.dy, position.dx, position.dy),
-        items: [
-          const PopupMenuItem(
-            value: 'login_facebook',
-            child: Text('Đăng nhập với Facebook'),
+    return Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+          child: Column(
+            children: [
+              const AppIcon(),
+              Image(
+                image: const AssetImage('assets/1.jpg'),
+                height: 400,
+                width: 350,
+              ),
+              _buildSlogan(),
+              _buildOauthForm(),
+              InkWell(
+                key: moreOptionsKey,
+                child: const Text('More sign-in options',
+                    style: TextStyle(
+                      fontFamily: 'Roboto',
+                      color: Color(0xFF010101),
+                      fontSize: 14,
+                      decoration: TextDecoration.underline,
+                    )),
+                onTap: () {
+                  // showModalBottomSheet<void>(
+                  //   context: context,
+                  //   builder: (BuildContext context) {
+                  //     return _buildModalOptions(context);
+                  //   },
+                  // );
+                  showMoreOptions(context);
+                },
+              ),
+            ],
           ),
-          const PopupMenuItem(
-            value: 'login_email',
-            child: Text('Đăng nhập với Email'),
-          ),
-          const PopupMenuItem(
-            value: 'register_email',
-            child: Text('Đăng ký với Email'),
-          ),
-        ],
-      );
-      if (result != null) {
-        print("null");
-        if (result == 'login_facebook') {
-          // Xử lý khi nhấn vào Đăng nhập với Facebook
-          print("login_face");
-        } else if (result == 'login_email') {
-          print(3);
-          // Xử lý khi nhấn vào Đăng nhập với Email
-        } else if (result == 'register_email') {
-          print(4);
-          // Xử lý khi nhấn vào Đăng ký với Email
-        }
+        ));
+  }
+
+  void showMoreOptions(BuildContext context) async {
+    final RenderBox renderBox =
+        moreOptionsKey.currentContext!.findRenderObject() as RenderBox;
+    final position = renderBox.localToGlobal(Offset.zero);
+    final result = await showMenu(
+      context: context,
+      position: RelativeRect.fromLTRB(
+          position.dx, position.dy, position.dx, position.dy),
+      items: [
+        const PopupMenuItem(
+          value: 'login_facebook',
+          child: Text('Continue with Facebook'),
+        ),
+        const PopupMenuItem(
+          value: 'login_email',
+          child: Text('Continue with email'),
+        ),
+        const PopupMenuItem(
+          value: 'register_email',
+          child: Text('Sign up with email'),
+        ),
+      ],
+    );
+    if (result != null) {
+      print("null");
+      if (result == 'login_facebook') {
+        // Xử lý khi nhấn vào Đăng nhập với Facebook
+        print("login_face");
+      } else if (result == 'login_email') {
+        print(3);
+        _showEmailLoginModal();
+        // Xử lý khi nhấn vào Đăng nhập với Email
+      } else if (result == 'register_email') {
+        print(4);
+        // Xử lý khi nhấn vào Đăng ký với Email
       }
     }
+  }
 
-    return Scaffold(
-        body: SafeArea(
-      child: Column(
-        children: [
-          const AppIcon(),
-          Image(
-            image: const AssetImage('assets/1.jpg'),
-            height: screenHeight * 0.4,
-            width: screenWidth * 0.35,
+  void _showEmailLoginModal() {
+    showModalBottomSheet<void>(
+      isScrollControlled: true,
+      useSafeArea: true,
+      context: moreOptionsKey.currentContext!,
+      builder: (BuildContext context) {
+        return _buildEmailLoginModal(context);
+      },
+    );
+  }
+
+  Widget _buildEmailLoginModal(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    return Container(
+        height: height*0.9,
+        color: Colors.white,
+        padding: const EdgeInsets.all(16),
+        child: const SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              LoginEmailWidget(),
+              
+            ],
           ),
-          _buildSlogan(),
-          _buildOauthForm(),
-          InkWell(
-            key: moreOptionsKey,
-            child: const Text('More sign-in options',
-                style: TextStyle(
-                  fontFamily: 'Roboto',
-                  color: Color(0xFF010101),
-                  fontSize: 14,
-                  decoration: TextDecoration.underline,
-                )),
-            onTap: () {
-              // showModalBottomSheet<void>(
-              //   context: context,
-              //   builder: (BuildContext context) {
-              //     return _buildModalOptions(context);
-              //   },
-              // );
-              showMoreOptions(context);
-            },
-          ),
-        ],
-      ),
-    ));
+        ));
   }
 
   Widget _buildSlogan() {

@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 
-class LoginEmailWidget extends StatefulWidget {
-  const LoginEmailWidget({super.key});
+class SignUpInputWidget extends StatefulWidget {
+  const SignUpInputWidget({super.key});
 
   @override
-  State<LoginEmailWidget> createState() => _LoginEmailWidgetState();
+  State<SignUpInputWidget> createState() => _SignUpInputWidgetState();
 }
 
-class _LoginEmailWidgetState extends State<LoginEmailWidget> {
-  final _formKey = GlobalKey<FormState>();
+class _SignUpInputWidgetState extends State<SignUpInputWidget> {
   bool _showPassword = false;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -20,7 +19,7 @@ class _LoginEmailWidgetState extends State<LoginEmailWidget> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const Text(
-            'Login',
+            'Sign Up',
             style: TextStyle(
               fontSize: 24,
               fontFamily: "GGX88HV",
@@ -28,7 +27,7 @@ class _LoginEmailWidgetState extends State<LoginEmailWidget> {
           ),
           const SizedBox(height: 17.0),
           const Text(
-            'Add your email and password',
+            'Input your email and password',
             style: TextStyle(
                 fontSize: 16,
                 fontFamily: "GGX88Reg_Light",
@@ -95,7 +94,7 @@ class _LoginEmailWidgetState extends State<LoginEmailWidget> {
               // Thực hiện xác thực hoặc các bước đăng nhập khác ở đây
               print('Email: $email, Password: $password');
             },
-            child: const Text('Log In'),
+            child: const Text('Sign Up'),
           ),
         ],
       ),
