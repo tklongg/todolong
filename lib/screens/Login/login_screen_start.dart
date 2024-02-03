@@ -28,8 +28,8 @@ class _LoginScreenStartState extends State<LoginScreenStart> {
           child: Column(
             children: [
               const AppIcon(),
-              Image(
-                image: const AssetImage('assets/1.jpg'),
+              const Image(
+                image: AssetImage('assets/1.jpg'),
                 height: 400,
                 width: 350,
               ),

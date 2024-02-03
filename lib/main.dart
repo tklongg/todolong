@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'todolong',
-      home: const PreferenceSelectionScreen(),
+      home: const UserProfileScreen(),
       routes: {
         '/login_start': (context) => const LoginScreenStart(),
         '/preference_selection': (context) => const PreferenceSelectionScreen(),

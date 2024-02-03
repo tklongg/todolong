@@ -58,51 +58,56 @@ class _PreferenceSelectionScreenState extends State<PreferenceSelectionScreen> {
                 const SizedBox(height: 17.0),
                 Column(
                   children: [
-                    CheckboxItem(
+                    checkBoxItem(
                         image: Image.asset('assets/1.jpg', height: x, width: y),
                         text: 'Personal'),
-                    CheckboxItem(
+                    checkBoxItem(
                         image: Image.asset('assets/1.jpg', height: x, width: y),
                         text: 'Work'),
-                    CheckboxItem(
+                    checkBoxItem(
                         image: Image.asset('assets/1.jpg', height: x, width: y),
                         text: 'Education'),
                   ],
                 ),
                 const SizedBox(height: 17.0),
-                HelpSlider(),
+                helpSlider(),
                 const SizedBox(height: 17.0),
                 Container(
-                  alignment: Alignment.center,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: isContinueButtonEnabled()
-                          ? const Color(0xFFD74638)
-                          : const Color(0xFFD74638),
-                      minimumSize: const Size(double.infinity, 60),
-                      
-                    ),
-                    onPressed: () {
-                      _navigateToInputUserProfile();
-                    },
-                    child: const Text('Continue',style: TextStyle(
-                      fontSize: 16,
-                      fontFamily: "GGX88Reg",
-                      color: Colors.white,
-                    ),
-                  ),
-                )),
+                    alignment: Alignment.center,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: isContinueButtonEnabled()
+                            ? const Color(0xFFD74638)
+                            : const Color.fromARGB(255, 241, 124, 114),
+                        minimumSize: const Size(double.infinity, 60),
+                      ),
+                      onPressed: () {
+                        if (isContinueButtonEnabled()) {
+                          _navigateToInputUserProfile();
+                        } else {
+                          null;
+                        }
+                      },
+                      child: const Text(
+                        'Continue',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: "GGX88Reg",
+                          color: Colors.white,
+                        ),
+                      ),
+                    )),
               ],
             )));
   }
 
-  Widget HelpSlider() {
+  Widget helpSlider() {
     return Container(
       padding: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
         border: Border.all(
-          color: Colors.grey, // Màu của border
-          width: 1.0, // Độ dày của border
+          color: const Color(0XFFd2d2d2), // Màu của border
+          width: 1.5, // Độ dày của border
         ),
         borderRadius: BorderRadius.circular(8.0), // Độ cong của border
       ),
@@ -138,51 +143,62 @@ class _PreferenceSelectionScreenState extends State<PreferenceSelectionScreen> {
     );
   }
 
-  Widget CheckboxItem({required Image image, required String text}) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
-      padding: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.grey, // Màu của border
-          width: 1.0, // Độ dày của border
-        ),
-        borderRadius: BorderRadius.circular(8.0), // Độ cong của border
-      ),
-      child: Row(
-        mainAxisAlignment:
-            MainAxisAlignment.spaceBetween, // Đặt checkbox về đầu
-        children: [
-          Container(
-            padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-            child: Row(
-              children: [
-                image,
-                const SizedBox(width: 15.0, height: 60.0),
-                Text(text,
-                    style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.normal,
-                        fontFamily: "GGX88Reg_Light",
-                        color: Color(0xFF6e6e6e))),
-              ],
-            ),
+  Widget checkBoxItem({required Image image, required String text}) {
+    return InkWell(
+      onTap: () => {
+        setState(() {
+          preferences[text] = !preferences[text]!;
+        })
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 8.0),
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: preferences[text]!
+                ? const Color(0xFFD74638)
+                : const Color(0XFFd2d2d2), // Màu của border
+            width: 2.0, // Độ dày của border
           ),
-          Container(
-            padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-            child: Checkbox(
-              value: preferences[text],
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(100.0),
+          borderRadius: BorderRadius.circular(8.0), // Độ cong của border
+        ),
+        child: Row(
+          mainAxisAlignment:
+              MainAxisAlignment.spaceBetween, // Đặt checkbox về đầu
+          children: [
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+              child: Row(
+                children: [
+                  image,
+                  const SizedBox(width: 15.0, height: 60.0),
+                  Text(text,
+                      style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.normal,
+                          fontFamily: "GGX88Reg_Light",
+                          color: Color(0xFF6e6e6e))),
+                ],
               ),
-              onChanged: (bool? value) {
-                setState(() {
-                  preferences[text] = value!;
-                });
-              },
             ),
-          )
-        ],
+            Container(
+              padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+              child: Checkbox(
+                activeColor: const Color(0xFFD74638),
+                value: preferences[text],
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(100.0),
+                  side: const BorderSide(color: Colors.grey),
+                ),
+                onChanged: (bool? value) {
+                  setState(() {
+                    preferences[text] = value!;
+                  });
+                },
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
