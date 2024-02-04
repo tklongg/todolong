@@ -9,9 +9,16 @@ class UserProfileScreen extends StatefulWidget {
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
   final _nameController = TextEditingController();
+  String currName = '';
   bool isPhotoUpload = false;
+  String photoURI = '';
   @override
   Widget build(BuildContext context) {
+    void onNameChanged (String value) {
+      setState(() {
+        currName = value;
+      });
+    }
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.white,
@@ -59,7 +66,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 ),
               ),
               TextSpan(
-                text: '🧭 🏳️\u200d🌈',
+                text: '🌈',
                 style: TextStyle(
                   fontSize: 16,
                   fontFamily: 'EmojiOne',
@@ -85,6 +92,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   }
 
   Widget buildInfoInputForm() {
+    
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -122,13 +130,17 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     color: Color(0xFF6e6e6e)),
               ),
               TextField(
-                controller: _nameController,
+                // controller: _nameController,
                 keyboardType: TextInputType.name,
                 style: const TextStyle(
                   fontSize: 13,
                   fontFamily: "GGX88Reg_Light",
                   color: Color(0xFF6e6e6e),
                 ),
+                onChanged: (value) {
+                  print(
+                      'First text field: $value (${value.characters.length})');
+                },
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: 'Enter your name',
@@ -158,7 +170,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           width: 100,
           decoration: const BoxDecoration(
             shape: BoxShape.circle,
-            color: Colors.grey, // Màu của hình tròn khi chưa có ảnh
+            color: Color(0xFFD74638), // Màu của hình tròn khi chưa có ảnh
           ),
           child: Center(
             child: isPhotoUpload
@@ -167,8 +179,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     radius: 50,
                   )
                 : Text(
-                    _nameController.text.isNotEmpty
-                        ? _nameController.text.substring(0, 2).toUpperCase()
+                    currName.isNotEmpty
+                        ? currName.substring(0, 2).toUpperCase()
                         : 'U',
                     style: const TextStyle(
                       fontSize: 24,
@@ -179,24 +191,34 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         ),
         const SizedBox(height: 10.0),
         ElevatedButton(
-          
           onPressed: () {
             // Thêm logic tải ảnh
             setState(() {
               isPhotoUpload = true;
             });
           },
-          child: Text('Upload your photo',style: const TextStyle(
-            fontFamily: 'GGX88Reg_Light'
-          ),),
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFFf4f4f4),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(5),
-
             ),
             padding: const EdgeInsets.all(8),
           ),
+          child: const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(Icons.camera_alt, color: Color(0xFF6e6e6e)),
+                // const Spacer(),
+                SizedBox(width: 8.0),
+                Text(
+                  'Upload your photo',
+                  style: TextStyle(
+                      fontFamily: 'GGX88Reg_Light',
+                      fontSize: 13,
+                      color: Color(0xFF6e6e6e)),
+                )
+              ]),
         ),
         SizedBox(height: 16.0),
       ],
