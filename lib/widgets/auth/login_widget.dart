@@ -8,7 +8,7 @@ class LoginEmailWidget extends StatefulWidget {
 }
 
 class _LoginEmailWidgetState extends State<LoginEmailWidget> {
-  final _formKey = GlobalKey<FormState>();
+  // final _formKey = GlobalKey<FormState>();
   bool _showPassword = false;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
