@@ -90,6 +90,10 @@ flutter:
     - family: GGX88Reg_Light
       fonts:
         - asset: assets/fonts/GGX88Lt-Regular.ttf
+    - family: SF_Regular
+      fonts:
+        - asset: assets/fonts/SF-Regular.otf
+
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
