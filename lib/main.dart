@@ -8,6 +8,11 @@ void main() {
   runApp(const MyApp());
 }
 
+ThemeData _baseTheme = ThemeData(
+  fontFamily: "Roboto",
+  canvasColor: Colors.transparent,
+);
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -16,6 +21,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'todolong',
+      // theme: _baseTheme,
+      // debugShowCheckedModeBanner: false,
       home: const MainScreen(),
       routes: {
         '/login_start': (context) => const LoginScreenStart(),

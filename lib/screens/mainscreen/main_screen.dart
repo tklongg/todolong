@@ -16,20 +16,23 @@ class _MainScreenState extends State<MainScreen> {
     TodayScreen(),
     InboxScreen(),
     SearchScreen(),
-    BrowseScreen(),
+    // BrowseScreen(),
   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: PageView(
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+            child: PageView(
           controller: _pageController,
+          physics: const NeverScrollableScrollPhysics(),
           children: _screens,
           onPageChanged: (index) {
             setState(() {
               _currentIndex = index;
             });
           },
-        ),
+        )),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: _currentIndex,
@@ -41,7 +44,13 @@ class _MainScreenState extends State<MainScreen> {
               duration: const Duration(milliseconds: 150),
               curve: Curves.linearToEaseOut,
             );
-          },
+          }
+          // onTap: (index) {
+          //   setState(() {
+          //     _currentIndex = index;
+          //   });
+          // }
+          ,
           items: [
             BottomNavigationBarItem(
               icon: buildTodayIcon(),
@@ -49,27 +58,43 @@ class _MainScreenState extends State<MainScreen> {
             ),
             const BottomNavigationBarItem(
               icon: Icon(Icons.inbox),
-              label: 'Inbox',
+              label: 'Upcoming',
             ),
             const BottomNavigationBarItem(
               icon: Icon(Icons.search),
-              label: 'Search',
+              label: 'All',
             ),
-            const BottomNavigationBarItem(
-              icon: Icon(Icons.list_alt_rounded),
-              label: 'Browse',
-            ),
+            // const BottomNavigationBarItem(
+            //   icon: Icon(Icons.list_alt_rounded),
+            //   label: 'Browse',
+            // ),
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          shape: CircleBorder(
+          onPressed: () {
+            showAddTodo();
+          },
+          shape: const CircleBorder(
               side: BorderSide(color: const Color.fromARGB(0, 255, 255, 255))),
-          backgroundColor: Color(0xFFD74638),
-          child: const Icon(Icons.add,color: Colors.white,),
+          backgroundColor: const Color(0xFFD74638),
+          child: const Icon(
+            Icons.add,
+            color: Colors.white,
+          ),
         ));
   }
 
+  void showAddTodo(){
+    showModalBottomSheet(context: context, builder: (context){
+      
+      return Container(
+        height: MediaQuery.of(context).size.height * 0.8,
+        width: double.infinity,
+        color: Colors.white,
+        child: Text("kk"),
+      );
+    });
+  }
   Widget buildTodayIcon() {
     // Lấy ngày hiện tại
     String currentDay = DateFormat.d().format(DateTime.now());
@@ -99,20 +124,6 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 }
-
-// class TodayScreen extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Today'),
-//       ),
-//       body: Center(
-//         child: Text('Today Screen'),
-//       ),
-//     );
-//   }
-// }
 
 class InboxScreen extends StatelessWidget {
   @override

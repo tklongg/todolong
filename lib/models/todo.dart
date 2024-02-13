@@ -1,3 +1,5 @@
+import 'package:todolong/models/comment.dart';
+
 class Todo {
   int id;
   String title;
@@ -7,7 +9,9 @@ class Todo {
   String? location;
   List<String>? labels;
   List<Todo>? subtasks;
+  DateTime? addedDate = DateTime.now();
   DateTime? dueDate;
+  List<Comment>? comments;
   Todo({
     required this.id,
     required this.title,
@@ -20,23 +24,6 @@ class Todo {
     this.dueDate,
   });
 
-  // factory Todo.fromJson(Map<String, dynamic> json) {
-  //   return Todo(
-  //     id: json['id'] as int,
-  //     title: json['title'] as String,
-  //     description: json['description'] as String?,
-  //     priority: json['priority'] as int,
-  //     reminder: json['reminder'] != null
-  //         ? DateTime.parse(json['reminder'] as String)
-  //         : null,
-  //     location: json['location'] as String?,
-  //     labels: (json['labels'] as List?)?.cast<String>(),
-  //     subtasks: (json['subtasks'] as List?)?.cast<int>(),
-  //     dueDate: json['dueDate'] != null
-  //         ? DateTime.parse(json['dueDate'] as String)
-  //         : null,
-  //   );
-  // }
   Todo.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         title = json['title'],
@@ -46,9 +33,13 @@ class Todo {
             ? DateTime.parse(json['reminder'] as String)
             : null,
         location = json['location'] as String?,
+        labels = (json['labels'] as List?)?.map((label) => label as String).toList(),
         subtasks = (json['subtasks'] as List?)
             ?.map((subtask) => Todo.fromJson(subtask))
             .toList(),
+        addedDate = json['addedDate'] != null
+            ? DateTime.parse(json['addedDate'] as String)
+            : null,
         dueDate = json['dueDate'] != null
             ? DateTime.parse(json['dueDate'] as String)
             : null;
@@ -61,6 +52,7 @@ class Todo {
         'location': location,
         'labels': labels,
         'subtasks': subtasks?.map((subtask) => subtask.toJson()).toList(),
+        'addedDate': addedDate?.toIso8601String(),
         'dueDate': dueDate?.toIso8601String(),
       };
 }
