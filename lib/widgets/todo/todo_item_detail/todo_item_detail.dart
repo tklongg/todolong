@@ -403,44 +403,26 @@ class TodoItemDetail extends StatelessWidget {
         border: Border(top: BorderSide(color: Colors.grey[300]!)),
       ),
       child: Theme(
-        data: ThemeData().copyWith(dividerColor: Colors.transparent),
-        child: ExpansionTile(
-            title: Text("Subtasks ${todo.subtasks!.length >> 0}",
-                style: const TextStyle(
-                  fontFamily: ".SF Pro Text",
-                  fontSize: 16,
-                )),
-            collapsedBackgroundColor:
-                Colors.transparent, // Đặt màu nền khi thu gọn là trong suốt
-            tilePadding: EdgeInsets.zero,
-
-            // childrenPadding:
-            // EdgeInsets.all(8), // Đặt khoảng cách giữa các children
-            children: todo.subtasks!.length > 0
-                ? buildSubTask()
-                : [buildEmptySubtask()]
-            // [
-            // ListView.builder(
-            //   itemCount: todo.subtasks!.length,
-            //   itemBuilder: (context, index) {
-            //     return TodoItemWidget(
-            //       isModalOpen: true,
-            //       todo: todo.subtasks![index],
-            //       onCloseModal: (){},
-            //       onOpenModal: (){},
-            //     );
-
-            //   },
-            //  )
-            // TodoItemWidget(
-            //   isModalOpen: true,
-            //   todo: todo.subtasks![0],
-            //   onCloseModal: () {},
-            //   onOpenModal: () {},
-            // )
-            // ],
-            ),
-      ),
+          data: ThemeData().copyWith(dividerColor: Colors.transparent),
+          child: ListTileTheme(
+            contentPadding: const EdgeInsets.all(0),
+            // dense: true,
+            // horizontalTitleGap: 0.0,
+            // minLeadingWidth: 0,
+            child: ExpansionTile(
+                title: Text("Sub-tasks ${todo.subtasks!.length >> 0}",
+                    style: const TextStyle(
+                      fontFamily: ".SF Pro Text",
+                      fontSize: 16,
+                    )),
+                collapsedBackgroundColor:
+                    Colors.transparent, // Đặt màu nền khi thu gọn là trong suốt
+                tilePadding: EdgeInsets.zero,
+                // trailing: const SizedBox.shrink(),
+                children: todo.subtasks!.isNotEmpty
+                    ? buildSubTasks()
+                    : [buildEmptySubtask()]),
+          )),
     );
   }
 
@@ -450,7 +432,7 @@ class TodoItemDetail extends StatelessWidget {
     );
   }
 
-  List<Widget> buildSubTask() {
+  List<Widget> buildSubTasks() {
     return todo.subtasks!.map((e) {
       return TodoItemWidget(
         isModalOpen: true,

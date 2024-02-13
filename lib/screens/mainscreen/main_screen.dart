@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:todolong/screens/today/today_screen.dart';
+import 'package:todolong/widgets/todo/add_todo/add_todo.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -84,17 +85,15 @@ class _MainScreenState extends State<MainScreen> {
         ));
   }
 
-  void showAddTodo(){
-    showModalBottomSheet(context: context, builder: (context){
-      
-      return Container(
-        height: MediaQuery.of(context).size.height * 0.8,
-        width: double.infinity,
-        color: Colors.white,
-        child: Text("kk"),
-      );
-    });
+  void showAddTodo() {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (context) {
+          return const AddTodo();
+        });
   }
+
   Widget buildTodayIcon() {
     // Lấy ngày hiện tại
     String currentDay = DateFormat.d().format(DateTime.now());

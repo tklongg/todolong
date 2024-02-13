@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:todolong/models/todo.dart';
 import 'package:todolong/widgets/today/comment_modal.dart';
 import 'package:todolong/widgets/todo/todo_item_detail/todo_item_detail.dart';
@@ -30,15 +29,12 @@ class TodoModal extends StatelessWidget {
   }
 
   void _showCommentModal(context) {
-    showCupertinoModalBottomSheet(
+    showModalBottomSheet(
       isDismissible: true,
       context: context,
-      expand: true,
-     
-      // isScrollControlled: true,
+      isScrollControlled: true,
       useRootNavigator: true,
       enableDrag: true,
-      // backgroundColor: Colors.transparent,
       builder: (context) => PopScope(
         child: const CommentModal(),
         onPopInvoked: (didPop) {
@@ -99,7 +95,6 @@ class TodoModal extends StatelessWidget {
 
   Widget buildTodoDetail(context) {
     return Expanded(
-
       child: SingleChildScrollView(
         child: Container(
           width: double.infinity,
