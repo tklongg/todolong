@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ReminderWidget extends StatefulWidget {
+class ReminderWidget extends StatelessWidget {
   const ReminderWidget({super.key});
-
-  @override
-  State<ReminderWidget> createState() => _ReminderWidgetState();
-}
-
-class _ReminderWidgetState extends State<ReminderWidget> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -31,7 +25,7 @@ class _ReminderWidgetState extends State<ReminderWidget> {
             ), // Icon của mục
             SizedBox(width: 5),
             Text("Reminder",
-                style: const TextStyle(
+                style: TextStyle(
                   color: Color(0xFF6D6D6D),
                   fontFamily: ".SF Pro Text",
                   fontSize: 16,

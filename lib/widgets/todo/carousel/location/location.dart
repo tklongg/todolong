@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
 
-class LocationWidget extends StatefulWidget {
-  const LocationWidget({super.key});
-
-  @override
-  State<LocationWidget> createState() => _LocationWidgetState();
-}
-
-class _LocationWidgetState extends State<LocationWidget> {
+class LocationWidget extends StatelessWidget {
+  const LocationWidget({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

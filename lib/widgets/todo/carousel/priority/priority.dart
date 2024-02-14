@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 
-class PriorityWidget extends StatefulWidget {
-  const PriorityWidget({super.key});
-
-  @override
-  State<PriorityWidget> createState() => _PriorityWidgetState();
-}
-
-class _PriorityWidgetState extends State<PriorityWidget> {
+class PriorityWidget extends StatelessWidget {
+  final int? priority;
+  const PriorityWidget({super.key, this.priority});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -31,7 +26,7 @@ class _PriorityWidgetState extends State<PriorityWidget> {
             ), // Icon của mục
             SizedBox(width: 5),
             Text("Priority",
-                style: const TextStyle(
+                style: TextStyle(
                   color: Color(0xFF6D6D6D),
                   fontFamily: ".SF Pro Text",
                   fontSize: 16,

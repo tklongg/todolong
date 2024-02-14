@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 
-class ScheduleWidget extends StatefulWidget {
+
+
+class ScheduleWidget extends StatelessWidget {
   final DateTime? dueDate;
   const ScheduleWidget({super.key, this.dueDate});
-  @override
-  State<ScheduleWidget> createState() => _ScheduleWidgetState();
-}
-
-class _ScheduleWidgetState extends State<ScheduleWidget> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

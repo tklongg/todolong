@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 
-class LabelWidget extends StatefulWidget {
-  const LabelWidget({super.key});
+class LabelWidget extends StatelessWidget {
+  final List<String>? labels;
+  const LabelWidget({super.key,this.labels});
 
-  @override
-  State<LabelWidget> createState() => _LabelWidgetState();
-}
-
-class _LabelWidgetState extends State<LabelWidget> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
