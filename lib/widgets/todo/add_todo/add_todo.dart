@@ -14,19 +14,36 @@ class _AddTodoState extends State<AddTodo> {
   String title = '';
   String description = '';
   DateTime? dueDate = DateTime.now();
-  DateTime? reminder;
+  Duration? reminder;
+  Duration? reminderDuration;
   int test = 0;
   int priority = 4;
   void setDueDate(DateTime value) {
-    dueDate = value;
+    setState(() {
+      dueDate = value;
+    });
   }
 
-  void setReminder(DateTime value) {
-    reminder = value;
+  void setReminder(Duration time) {
+    setState(() {
+      reminder = time;
+    });
+    print("reminder<<<");
+    print(reminder);
+  }
+
+  void setReminderDuration(Duration time) {
+    setState(() {
+      reminderDuration = time;
+    });
+    print("reminder dur<<<");
+    print(reminder);
   }
 
   void setPriority(int value) {
-    priority = value;
+    setState(() {
+      priority = value;
+    });
   }
 
   @override

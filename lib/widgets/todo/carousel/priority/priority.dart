@@ -1,15 +1,53 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:todolong/widgets/todo/todo_priority_choose/todo_priority_choose.dart';
 
 class PriorityWidget extends StatelessWidget {
   final int? priority;
   final ValueChanged<int>? setPriority;
-  const PriorityWidget({super.key, this.priority,this.setPriority});
+  const PriorityWidget({super.key, this.priority, this.setPriority});
   @override
   Widget build(BuildContext context) {
     print("cout<<prior");
     print(priority);
+    Color iconColor = Colors.black;
+    Color textColor = Colors.black;
+    String labelText = "Priority";
+    switch (priority) {
+      case 1:
+        iconColor = const Color(0xFFD1453A);
+        textColor = const Color(0xFFD1453A);
+        labelText = "Priority 1";
+        break;
+      case 2:
+        iconColor = const Color(0xFFEC8711);
+        textColor = const Color(0xFFEC8711);
+        labelText = "Priority 2";
+        break;
+      case 3:
+        iconColor = const Color(0xFFE5C22D);
+        textColor = const Color(0xFFE5C22D);
+        labelText = "Priority 3";
+        break;
+      case 4:
+        iconColor = const Color(0xFFA3A3A3);
+        textColor = const Color(0xFFA3A3A3);
+        labelText = "Priority 4";
+        break;
+      default:
+        iconColor = Colors.black;
+        textColor = Colors.black;
+        labelText = "Priority";
+    }
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        showCupertinoModalPopup(
+            context: context,
+            builder: (BuildContext context) {
+              return TodoPriorityChoose(
+                  priority: priority, setPriority: setPriority);
+            });
+      },
       child: Container(
         margin: EdgeInsets.all(8.0),
         padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
@@ -19,18 +57,18 @@ class PriorityWidget extends StatelessWidget {
           border: Border.all(color: Colors.grey[300]!),
           borderRadius: BorderRadius.circular(10),
         ),
-        child: const Row(
+        child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Icon(
               Icons.flag,
               size: 15,
-              color: const Color(0xFF6D6D6D),
+              color: iconColor,
             ), // Icon của mục
-            SizedBox(width: 5),
-            Text("Priority",
+            const SizedBox(width: 5),
+            Text(labelText,
                 style: TextStyle(
-                  color: Color(0xFF6D6D6D),
+                  color: textColor,
                   fontFamily: ".SF Pro Text",
                   fontSize: 16,
                 )), // Label của mục

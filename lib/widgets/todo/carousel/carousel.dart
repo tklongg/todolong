@@ -34,20 +34,22 @@ import 'package:todolong/widgets/todo/carousel/schedule/schedule.dart';
 // }
 
 class Carousel extends StatelessWidget {
-  final DateTime? dueDate;
-  final int? priority;
-  final DateTime? reminder;
+  DateTime? dueDate;
+  int? priority;
+  Duration? reminder;
   final ValueChanged<DateTime>? setDueDate;
   final ValueChanged<int>? setPriority;
-  final ValueChanged<DateTime>? setReminder;
-  const Carousel(
-      {super.key,
-      this.dueDate,
-      this.priority,
-      this.reminder,
-      this.setDueDate,
-      this.setPriority,
-      this.setReminder});
+  final ValueChanged<Duration>? setReminder;
+
+  Carousel({
+    super.key,
+    this.dueDate,
+    this.priority,
+    this.reminder,
+    this.setDueDate,
+    this.setPriority,
+    this.setReminder,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -57,8 +59,11 @@ class Carousel extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         children: [
           ScheduleWidget(dueDate: dueDate, setDueDate: setDueDate),
-          PriorityWidget(priority: priority,setPriority: setPriority),
-          ReminderWidget(reminder: reminder, setReminder: setReminder),
+          PriorityWidget(priority: priority, setPriority: setPriority),
+          ReminderWidget(
+            reminder: reminder,
+            setReminder: setReminder,
+          ),
           const LabelWidget(),
           const LocationWidget()
         ],
