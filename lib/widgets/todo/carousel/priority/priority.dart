@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class PriorityWidget extends StatelessWidget {
   final int? priority;
-  const PriorityWidget({super.key, this.priority});
+  final ValueChanged<int>? setPriority;
+  const PriorityWidget({super.key, this.priority,this.setPriority});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

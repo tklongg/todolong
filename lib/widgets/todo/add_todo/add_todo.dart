@@ -13,14 +13,22 @@ class _AddTodoState extends State<AddTodo> {
   late FocusNode _titleFocusNode;
   String title = '';
   String description = '';
-  DateTime? dueDate;
+  DateTime? dueDate = DateTime.now();
+  DateTime? reminder;
   int test = 0;
   int priority = 4;
-  void setTestPlus1 (){
-    setState(() {
-      test++;
-    });
+  void setDueDate(DateTime value) {
+    dueDate = value;
   }
+
+  void setReminder(DateTime value) {
+    reminder = value;
+  }
+
+  void setPriority(int value) {
+    priority = value;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -94,7 +102,14 @@ class _AddTodoState extends State<AddTodo> {
                         ),
                       )),
                 ),
-                Carousel(),
+                Carousel(
+                  dueDate: dueDate,
+                  reminder: reminder,
+                  priority: priority,
+                  setDueDate: setDueDate,
+                  setReminder: setReminder,
+                  setPriority: setPriority,
+                ),
                 const SizedBox(height: 10),
                 Container(
                   decoration: BoxDecoration(
@@ -131,6 +146,4 @@ class _AddTodoState extends State<AddTodo> {
       ),
     );
   }
-
-  
 }

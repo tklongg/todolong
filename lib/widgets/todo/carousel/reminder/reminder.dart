@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ReminderWidget extends StatelessWidget {
-  const ReminderWidget({super.key});
+  final DateTime? reminder;
+  final ValueChanged<DateTime>? setReminder;
+  const ReminderWidget({super.key, this.reminder, this.setReminder});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
