@@ -59,8 +59,8 @@ class Carousel extends StatelessWidget {
           ScheduleWidget(dueDate: dueDate, setDueDate: setDueDate),
           PriorityWidget(priority: priority,setPriority: setPriority),
           ReminderWidget(reminder: reminder, setReminder: setReminder),
-          LabelWidget(),
-          LocationWidget()
+          const LabelWidget(),
+          const LocationWidget()
         ],
       ),
     );

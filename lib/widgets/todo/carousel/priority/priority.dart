@@ -6,6 +6,8 @@ class PriorityWidget extends StatelessWidget {
   const PriorityWidget({super.key, this.priority,this.setPriority});
   @override
   Widget build(BuildContext context) {
+    print("cout<<prior");
+    print(priority);
     return GestureDetector(
       onTap: () {},
       child: Container(
