@@ -74,6 +74,5 @@ class TodoSchedulePicker extends StatelessWidget {
             ]),
           )
         ]));
-    ;
   }
 }

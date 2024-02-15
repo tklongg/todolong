@@ -77,7 +77,7 @@ class _TodayScreenState extends State<TodayScreen> {
   @override
   Widget build(BuildContext context) {
     List<Todo> todoList = context.watch<TodoProvider>().getTodayTodos();
-    
+    print("cout<<");
     print(todoList);
     formattedDate = DateFormat('dd MMM - EEEE').format(DateTime.now());
     return CustomScrollView(

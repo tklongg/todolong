@@ -14,9 +14,9 @@ class Todo {
   List<Comment>? comments;
   int? parentId;
   Todo(
-      { this.id,
+      {this.id,
       required this.title,
-      required this.description,
+      this.description,
       required this.priority,
       this.reminder,
       this.location,

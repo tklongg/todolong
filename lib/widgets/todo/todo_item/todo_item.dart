@@ -1,14 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:todolong/models/todo.dart';
-import 'package:todolong/providers/todo_provider.dart';
-import 'package:todolong/widgets/todo/todo_item/todo_priority_circle.dart';
-import 'package:todolong/widgets/todo/todo_modal.dart/todo_modal.dart';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:todolong/models/todo.dart';
+
 import 'package:todolong/widgets/todo/todo_item/todo_priority_circle.dart';
 import 'package:todolong/widgets/todo/todo_modal.dart/todo_modal.dart';
 
@@ -47,7 +41,7 @@ class TodoItemWidget extends StatelessWidget {
         if (onOpenModal != null) {
           onOpenModal!();
         }
-        final todoModel = Provider.of<TodoProvider>(context, listen: false);
+
         showModalBottomSheet<void>(
           isDismissible: true,
           context: context,
@@ -55,17 +49,14 @@ class TodoItemWidget extends StatelessWidget {
           useRootNavigator: true,
           enableDrag: true,
           backgroundColor: Colors.transparent,
-          builder: (context) => ListenableProvider.value(
-            value: todoModel,
-            child: PopScope(
-              child: TodoModal(id: todo.id!),
-              onPopInvoked: (didPop) {
-                // onCloseModal();
-                if (onCloseModal != null) {
-                  onCloseModal!();
-                }
-              },
-            ),
+          builder: (context) => PopScope(
+            child: TodoModal(id: todo.id!),
+            onPopInvoked: (didPop) {
+              // onCloseModal();
+              if (onCloseModal != null) {
+                onCloseModal!();
+              }
+            },
           ),
         );
       },

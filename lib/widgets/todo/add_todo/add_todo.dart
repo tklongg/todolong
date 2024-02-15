@@ -68,18 +68,18 @@ class _AddTodoState extends State<AddTodo> {
 
     final todo = Todo(
         title: title,
-        description: description,
+        description: description.isEmpty ? null : description,
         dueDate: dueDate,
         reminder: reminder,
         priority: priority,
         parentId: widget.parentId);
+    print(todo.toJson());
     Provider.of<TodoProvider>(context, listen: false).addTodo(todo);
     print("ok added");
   }
 
   @override
   Widget build(BuildContext context) {
-    final todoModel = Provider.of<TodoProvider>(context, listen: false);
     return Padding(
       padding:
           EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
