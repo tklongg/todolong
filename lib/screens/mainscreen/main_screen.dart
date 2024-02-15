@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:todolong/models/todo.dart';
+import 'package:todolong/providers/todo_provider.dart';
+
 import 'package:todolong/screens/today/today_screen.dart';
 import 'package:todolong/widgets/todo/add_todo/add_todo.dart';
 
@@ -14,7 +18,7 @@ class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
   final PageController _pageController = PageController();
   final List<Widget> _screens = [
-    TodayScreen(),
+    const TodayScreen(),
     InboxScreen(),
     SearchScreen(),
     // BrowseScreen(),
@@ -76,13 +80,77 @@ class _MainScreenState extends State<MainScreen> {
             showAddTodo();
           },
           shape: const CircleBorder(
-              side: BorderSide(color: const Color.fromARGB(0, 255, 255, 255))),
+              side: BorderSide(color: Color.fromARGB(0, 255, 255, 255))),
           backgroundColor: const Color(0xFFD74638),
           child: const Icon(
             Icons.add,
             color: Colors.white,
           ),
         ));
+    // return ChangeNotifierProvider(
+    //     create: ((context) => TodoProvider()),
+    //     child: Scaffold(
+    //         resizeToAvoidBottomInset: false,
+    //         body: SafeArea(
+    //             child: PageView(
+    //           controller: _pageController,
+    //           physics: const NeverScrollableScrollPhysics(),
+    //           children: _screens,
+    //           onPageChanged: (index) {
+    //             setState(() {
+    //               _currentIndex = index;
+    //             });
+    //           },
+    //         )),
+    //         bottomNavigationBar: BottomNavigationBar(
+    //           type: BottomNavigationBarType.fixed,
+    //           currentIndex: _currentIndex,
+    //           selectedItemColor: const Color(0xFFD74638),
+    //           selectedLabelStyle: const TextStyle(color: Color(0xFFD74638)),
+    //           onTap: (index) {
+    //             _pageController.animateToPage(
+    //               index,
+    //               duration: const Duration(milliseconds: 150),
+    //               curve: Curves.linearToEaseOut,
+    //             );
+    //           }
+    //           // onTap: (index) {
+    //           //   setState(() {
+    //           //     _currentIndex = index;
+    //           //   });
+    //           // }
+    //           ,
+    //           items: [
+    //             BottomNavigationBarItem(
+    //               icon: buildTodayIcon(),
+    //               label: 'Today',
+    //             ),
+    //             const BottomNavigationBarItem(
+    //               icon: Icon(Icons.inbox),
+    //               label: 'Upcoming',
+    //             ),
+    //             const BottomNavigationBarItem(
+    //               icon: Icon(Icons.search),
+    //               label: 'All',
+    //             ),
+    //             // const BottomNavigationBarItem(
+    //             //   icon: Icon(Icons.list_alt_rounded),
+    //             //   label: 'Browse',
+    //             // ),
+    //           ],
+    //         ),
+    //         floatingActionButton: FloatingActionButton(
+    //           onPressed: () {
+    //             showAddTodo();
+    //           },
+    //           shape: const CircleBorder(
+    //               side: BorderSide(color: Color.fromARGB(0, 255, 255, 255))),
+    //           backgroundColor: const Color(0xFFD74638),
+    //           child: const Icon(
+    //             Icons.add,
+    //             color: Colors.white,
+    //           ),
+    //         )));
   }
 
   void showAddTodo() {
@@ -90,7 +158,9 @@ class _MainScreenState extends State<MainScreen> {
         context: context,
         isScrollControlled: true,
         builder: (context) {
-          return const AddTodo();
+          return const AddTodo(
+            parentId: null,
+          );
         });
   }
 
@@ -102,10 +172,10 @@ class _MainScreenState extends State<MainScreen> {
     return Stack(
       alignment: Alignment.center,
       children: [
-        Icon(Icons.calendar_today),
+        const Icon(Icons.calendar_today),
         Positioned(
           child: Container(
-            padding: EdgeInsets.fromLTRB(2, 5, 2, 2),
+            padding: const EdgeInsets.fromLTRB(2, 5, 2, 2),
             decoration: BoxDecoration(
               // color: Colors.red,
               borderRadius: BorderRadius.circular(8),

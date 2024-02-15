@@ -1,21 +1,31 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todolong/models/todo.dart';
+import 'package:todolong/providers/todo_provider.dart';
+import 'package:todolong/widgets/todo/todo_item/todo_priority_circle.dart';
+import 'package:todolong/widgets/todo/todo_modal.dart/todo_modal.dart';
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:todolong/models/todo.dart';
 import 'package:todolong/widgets/todo/todo_item/todo_priority_circle.dart';
 import 'package:todolong/widgets/todo/todo_modal.dart/todo_modal.dart';
 
 class TodoItemWidget extends StatelessWidget {
   final Todo todo;
-  final bool isModalOpen; // Trạng thái mở/đóng của modalBottom
-  final VoidCallback onOpenModal;
-  final VoidCallback onCloseModal;
+  // final int? id;
+  final bool? isModalOpen;
+  final VoidCallback? onOpenModal;
+  final VoidCallback? onCloseModal;
 
   const TodoItemWidget({
     Key? key,
     required this.todo,
-    required this.isModalOpen,
-    required this.onOpenModal,
-    required this.onCloseModal,
+    // this.id,
+    this.isModalOpen,
+    this.onOpenModal,
+    this.onCloseModal,
   }) : super(key: key);
 
   @override
@@ -26,9 +36,18 @@ class TodoItemWidget extends StatelessWidget {
         onPressed: () {},
         child: buildPriorityCircleAvatar(todo.priority),
       ),
-      title: Text(todo.title),
+      title: Text(
+        todo.title,
+        style: const TextStyle(
+          fontFamily: ".SF Pro Text",
+          fontSize: 18,
+        ),
+      ),
       onTap: () {
-        onOpenModal();
+        if (onOpenModal != null) {
+          onOpenModal!();
+        }
+        final todoModel = Provider.of<TodoProvider>(context, listen: false);
         showModalBottomSheet<void>(
           isDismissible: true,
           context: context,
@@ -36,11 +55,17 @@ class TodoItemWidget extends StatelessWidget {
           useRootNavigator: true,
           enableDrag: true,
           backgroundColor: Colors.transparent,
-          builder: (context) => PopScope(
-            child: TodoModal(todo: todo),
-            onPopInvoked: (didPop) {
-              onCloseModal();
-            },
+          builder: (context) => ListenableProvider.value(
+            value: todoModel,
+            child: PopScope(
+              child: TodoModal(id: todo.id!),
+              onPopInvoked: (didPop) {
+                // onCloseModal();
+                if (onCloseModal != null) {
+                  onCloseModal!();
+                }
+              },
+            ),
           ),
         );
       },

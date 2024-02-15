@@ -8,10 +8,16 @@ import 'package:todolong/models/todo.dart';
 import 'package:todolong/widgets/todo/todo_item/todo_item.dart';
 import 'package:todolong/widgets/todo/todo_item/todo_priority_circle.dart';
 
-class TodoItemDetail extends StatelessWidget {
+class TodoItemDetail extends StatefulWidget {
   final Todo todo;
+  // const TodoItemDetail({super.key});
   const TodoItemDetail({super.key, required this.todo});
 
+  @override
+  State<TodoItemDetail> createState() => _TodoItemDetailState();
+}
+
+class _TodoItemDetailState extends State<TodoItemDetail> {
   @override
   Widget build(BuildContext context) {
     double columnGap = MediaQuery.of(context).size.height * 0.02;
@@ -84,10 +90,10 @@ class TodoItemDetail extends StatelessWidget {
       children: [
         Container(
             margin: const EdgeInsets.all(1.0),
-            child: TodoPriorityCircle(prior: todo.priority)),
+            child: TodoPriorityCircle(prior: widget.todo.priority)),
         const SizedBox(width: 10),
         Text(
-          todo.title,
+          widget.todo.title,
           style: const TextStyle(
             fontFamily: ".SF Pro Text",
             fontSize: 18,
@@ -99,9 +105,9 @@ class TodoItemDetail extends StatelessWidget {
 
   Widget buildDescription(context) {
     Widget a;
-    if (todo.description != null) {
+    if (widget.todo.description != null) {
       a = Text(
-        todo.description ?? "",
+        widget.todo.description ?? "",
         style: const TextStyle(
           fontFamily: ".SF Pro Text",
           fontSize: 17,
@@ -127,24 +133,24 @@ class TodoItemDetail extends StatelessWidget {
 
   Widget buildSchedule(BuildContext context) {
     Color? color = Colors.black38;
-    String dateString = todo.dueDate == null
+    String dateString = widget.todo.dueDate == null
         ? "Due Date"
-        : DateFormat('dd MMM - EEEE').format(todo.dueDate!);
+        : DateFormat('dd MMM - EEEE').format(widget.todo.dueDate!);
 
-    if (todo.dueDate != null) {
+    if (widget.todo.dueDate != null) {
       DateTime today = DateTime.now();
       DateTime tomorrow = DateTime(today.year, today.month, today.day + 1);
-      if (todo.dueDate!.isBefore(today)) {
+      if (widget.todo.dueDate!.isBefore(today)) {
         // Quá hạn
         color = Colors.red;
-      } else if (todo.dueDate!.day == today.day &&
-          todo.dueDate!.month == today.month &&
-          todo.dueDate!.year == today.year) {
+      } else if (widget.todo.dueDate!.day == today.day &&
+          widget.todo.dueDate!.month == today.month &&
+          widget.todo.dueDate!.year == today.year) {
         // Hôm nay
         color = Colors.green;
-      } else if (todo.dueDate!.day == tomorrow.day &&
-          todo.dueDate!.month == tomorrow.month &&
-          todo.dueDate!.year == tomorrow.year) {
+      } else if (widget.todo.dueDate!.day == tomorrow.day &&
+          widget.todo.dueDate!.month == tomorrow.month &&
+          widget.todo.dueDate!.year == tomorrow.year) {
         // Ngày mai
         color = Colors.yellow.shade800;
       } else {
@@ -185,7 +191,7 @@ class TodoItemDetail extends StatelessWidget {
 
   Widget buildPriorityChoosing(context) {
     Color color;
-    switch (todo.priority) {
+    switch (widget.todo.priority) {
       case 1:
         color = Colors.red;
         break;
@@ -205,7 +211,7 @@ class TodoItemDetail extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        showPriorityActionSheet(context, todo.priority);
+        showPriorityActionSheet(context, widget.todo.priority);
       },
       child: Row(
         children: [
@@ -215,7 +221,7 @@ class TodoItemDetail extends StatelessWidget {
             color: color,
           ),
           const SizedBox(width: 10),
-          Text('Priority ${todo.priority}',
+          Text('Priority ${widget.todo.priority}',
               style: const TextStyle(
                 fontFamily: ".SF Pro Text",
                 fontSize: 17,
@@ -250,7 +256,7 @@ class TodoItemDetail extends StatelessWidget {
                 ],
               )),
               onPressed: () {
-                todo.priority = 1;
+                widget.todo.priority = 1;
                 Navigator.pop(context, 1);
               },
             ),
@@ -273,7 +279,7 @@ class TodoItemDetail extends StatelessWidget {
                 ],
               )),
               onPressed: () {
-                todo.priority = 2;
+                widget.todo.priority = 2;
                 Navigator.pop(context, 2);
               },
             ),
@@ -296,7 +302,7 @@ class TodoItemDetail extends StatelessWidget {
                 ],
               )),
               onPressed: () {
-                todo.priority = 3;
+                widget.todo.priority = 3;
                 Navigator.pop(context, 4);
               },
             ),
@@ -319,7 +325,7 @@ class TodoItemDetail extends StatelessWidget {
                 ],
               )),
               onPressed: () {
-                todo.priority = 4;
+                widget.todo.priority = 4;
                 Navigator.pop(context, 4);
               },
             ),
@@ -410,7 +416,7 @@ class TodoItemDetail extends StatelessWidget {
             // horizontalTitleGap: 0.0,
             // minLeadingWidth: 0,
             child: ExpansionTile(
-                title: Text("Sub-tasks ${todo.subtasks!.length >> 0}",
+                title: Text("Sub-tasks ${widget.todo.subtasks!.length >> 0}",
                     style: const TextStyle(
                       fontFamily: ".SF Pro Text",
                       fontSize: 16,
@@ -419,7 +425,7 @@ class TodoItemDetail extends StatelessWidget {
                     Colors.transparent, // Đặt màu nền khi thu gọn là trong suốt
                 tilePadding: EdgeInsets.zero,
                 // trailing: const SizedBox.shrink(),
-                children: todo.subtasks!.isNotEmpty
+                children: widget.todo.subtasks!.isNotEmpty
                     ? buildSubTasks()
                     : [buildEmptySubtask()]),
           )),
@@ -433,9 +439,8 @@ class TodoItemDetail extends StatelessWidget {
   }
 
   List<Widget> buildSubTasks() {
-    return todo.subtasks!.map((e) {
+    return widget.todo.subtasks!.map((e) {
       return TodoItemWidget(
-        isModalOpen: true,
         todo: e,
         onCloseModal: () {},
         onOpenModal: () {},
@@ -451,7 +456,7 @@ class TodoItemDetail extends StatelessWidget {
       child: Theme(
         data: ThemeData().copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
-          title: Text("Comments ${todo.subtasks!.length >> 0}",
+          title: Text("Comments ${widget.todo.subtasks!.length >> 0}",
               style: const TextStyle(
                 fontFamily: ".SF Pro Text",
                 fontSize: 16,
@@ -478,3 +483,7 @@ class TodoItemDetail extends StatelessWidget {
     );
   }
 }
+
+// class TodoItemDetail extends StatelessWidget {
+  
+// }

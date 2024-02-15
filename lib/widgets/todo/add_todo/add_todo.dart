@@ -1,9 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todolong/models/todo.dart';
+import 'package:todolong/providers/todo_provider.dart';
 import 'package:todolong/widgets/todo/carousel/carousel.dart';
 
 class AddTodo extends StatefulWidget {
-  const AddTodo({super.key});
+  final int? parentId;
+  const AddTodo({super.key, this.parentId});
 
   @override
   State<AddTodo> createState() => _AddTodoState();
@@ -18,7 +22,8 @@ class _AddTodoState extends State<AddTodo> {
 
   int test = 0;
   int priority = 4;
-  int? parentId;
+  // int? parentId;
+
   void setDueDate(DateTime value) {
     setState(() {
       dueDate = value;
@@ -54,16 +59,27 @@ class _AddTodoState extends State<AddTodo> {
 
   void submit() {
     print("submit");
-    print("parentId ${parentId}");
+    print("parentId ${widget.parentId}");
     print("title ${title}");
     print("description ${description}");
     print("dueDate ${dueDate}");
     print("reminder ${reminder}");
     print("priority ${priority}");
+
+    final todo = Todo(
+        title: title,
+        description: description,
+        dueDate: dueDate,
+        reminder: reminder,
+        priority: priority,
+        parentId: widget.parentId);
+    Provider.of<TodoProvider>(context, listen: false).addTodo(todo);
+    print("ok added");
   }
 
   @override
   Widget build(BuildContext context) {
+    final todoModel = Provider.of<TodoProvider>(context, listen: false);
     return Padding(
       padding:
           EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),

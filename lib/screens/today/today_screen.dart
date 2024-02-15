@@ -3,13 +3,15 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:todolong/models/todo.dart';
 import 'package:flutter/foundation.dart';
+import 'package:todolong/providers/todo_provider.dart';
 import 'package:todolong/widgets/auth/comment_widget.dart';
 import 'package:todolong/widgets/today/comment_modal.dart';
 import 'package:todolong/widgets/todo/todo_item/todo_item.dart';
 
-List<Todo> todoList = [
+List<Todo> todoList2 = [
   Todo(
     id: 1,
     title: 'Buy groceries',
@@ -74,6 +76,9 @@ class _TodayScreenState extends State<TodayScreen> {
   bool isModalOpen = false;
   @override
   Widget build(BuildContext context) {
+    List<Todo> todoList = context.watch<TodoProvider>().getTodayTodos();
+    
+    print(todoList);
     formattedDate = DateFormat('dd MMM - EEEE').format(DateTime.now());
     return CustomScrollView(
       physics: const BouncingScrollPhysics(
@@ -130,22 +135,6 @@ class _TodayScreenState extends State<TodayScreen> {
                     itemBuilder: (BuildContext context, int index) {
                       return TodoItemWidget(
                         todo: todoList[index],
-                        isModalOpen:
-                            isModalOpen, // Truyền giá trị isModalOpen vào mỗi TodoItemWidget
-                        onOpenModal: () {
-                          setState(() {
-                            isModalOpen = true; // Mở modalBottom
-                          });
-                          print("cout<<");
-                          print(isModalOpen);
-                        },
-                        onCloseModal: () {
-                          setState(() {
-                            isModalOpen = false; // Đóng modalBottom
-                          });
-                          print("cout<<");
-                          print(isModalOpen);
-                        },
                       );
                     },
                   ),

@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todolong/models/todo.dart';
+import 'package:todolong/providers/todo_provider.dart';
 import 'package:todolong/widgets/today/comment_modal.dart';
 import 'package:todolong/widgets/todo/todo_item_detail/todo_item_detail.dart';
 
 class TodoModal extends StatelessWidget {
-  final Todo todo;
-  const TodoModal({Key? key, required this.todo}) : super(key: key);
+  // final Todo todo;
+  final int id;
+  const TodoModal({Key? key, required this.id}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final Todo todo =
+        Provider.of<TodoProvider>(context, listen: false).getTodoById(id);
+    print(todo);
     return SizedBox(
         height: MediaQuery.of(context).size.height * 0.8,
         width: MediaQuery.of(context).size.width * 1,
