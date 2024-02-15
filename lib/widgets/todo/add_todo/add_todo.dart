@@ -15,9 +15,10 @@ class _AddTodoState extends State<AddTodo> {
   String description = '';
   DateTime? dueDate = DateTime.now();
   Duration? reminder;
-  Duration? reminderDuration;
+
   int test = 0;
   int priority = 4;
+  int? parentId;
   void setDueDate(DateTime value) {
     setState(() {
       dueDate = value;
@@ -29,14 +30,6 @@ class _AddTodoState extends State<AddTodo> {
       reminder = time;
     });
     print("reminder<<<");
-    print(reminder);
-  }
-
-  void setReminderDuration(Duration time) {
-    setState(() {
-      reminderDuration = time;
-    });
-    print("reminder dur<<<");
     print(reminder);
   }
 
@@ -57,6 +50,16 @@ class _AddTodoState extends State<AddTodo> {
   void dispose() {
     _titleFocusNode.dispose(); // Hủy bỏ FocusNode khi widget bị hủy
     super.dispose();
+  }
+
+  void submit() {
+    print("submit");
+    print("parentId ${parentId}");
+    print("title ${title}");
+    print("description ${description}");
+    print("dueDate ${dueDate}");
+    print("reminder ${reminder}");
+    print("priority ${priority}");
   }
 
   @override
@@ -140,6 +143,8 @@ class _AddTodoState extends State<AddTodo> {
                     onTap: () {
                       //handle add todo
                       print(1);
+                      submit();
+                      Navigator.of(context).pop();
                     },
                     child: Container(
                         decoration: const BoxDecoration(

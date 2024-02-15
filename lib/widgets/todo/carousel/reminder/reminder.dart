@@ -8,24 +8,54 @@ class ReminderWidget extends StatelessWidget {
   const ReminderWidget({super.key, this.reminder, this.setReminder});
   @override
   Widget build(BuildContext context) {
+    Duration? selectedReminder = reminder;
     return GestureDetector(
       onTap: () {
         showModalBottomSheet(
             context: context,
+            isScrollControlled: true,
             builder: (context) {
-              return Container(
-                height: 200,
-                color: Colors.white,
-                child: CupertinoTimerPicker(
-                  initialTimerDuration: reminder ?? Duration.zero,
-                  mode: CupertinoTimerPickerMode.hm,
-                  onTimerDurationChanged: (time) => {setReminder!(time)},
-                ),
-              );
+              return Wrap(children: [
+                Container(
+                  color: Colors.white ,
+                  child: Column(children: [
+                    CupertinoNavigationBar(
+                      border: Border.all(color: Colors.transparent),
+                      backgroundColor: Colors.white,
+                      leading: CupertinoButton(
+                        padding: const EdgeInsets.all(0),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Cancel',
+                            style: TextStyle(color: Color(0xFFD1453A))),
+                      ),
+                      trailing: CupertinoButton(
+                        padding: const EdgeInsets.all(0),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          if (setReminder != null) {
+                            setReminder!(selectedReminder ?? Duration.zero);
+                          }
+                        },
+                        child: const Text('Done',
+                            style: TextStyle(color: Color(0xFFD1453A))),
+                      ),
+                    ),
+                    CupertinoTimerPicker(
+                      initialTimerDuration: reminder ?? Duration.zero,
+                      mode: CupertinoTimerPickerMode.hm,
+                      onTimerDurationChanged: (time) => {
+                        {selectedReminder = time}
+                      },
+                    ),
+                  ]),
+                )
+              ]);
             });
       },
       child: Container(
-        margin: EdgeInsets.all(8.0),
+        margin: const EdgeInsets.all(8.0),
         padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
         // height: 40,
         decoration: BoxDecoration(

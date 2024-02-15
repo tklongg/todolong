@@ -25,8 +25,8 @@ class PriorityWidget extends StatelessWidget {
         labelText = "Priority 2";
         break;
       case 3:
-        iconColor = const Color(0xFFE5C22D);
-        textColor = const Color(0xFFE5C22D);
+        iconColor = const Color(0xFF236FDE);
+        textColor = const Color(0xFF236FDE);
         labelText = "Priority 3";
         break;
       case 4:
@@ -49,7 +49,7 @@ class PriorityWidget extends StatelessWidget {
             });
       },
       child: Container(
-        margin: EdgeInsets.all(8.0),
+        margin: const EdgeInsets.all(8.0),
         padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
         // height: 40,
         decoration: BoxDecoration(

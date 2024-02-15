@@ -9,8 +9,8 @@ import 'package:todolong/widgets/todo/todo_item/todo_item.dart';
 import 'package:todolong/widgets/todo/todo_item/todo_priority_circle.dart';
 
 class TodoItemDetail extends StatelessWidget {
-  Todo todo;
-  TodoItemDetail({super.key, required this.todo});
+  final Todo todo;
+  const TodoItemDetail({super.key, required this.todo});
 
   @override
   Widget build(BuildContext context) {
