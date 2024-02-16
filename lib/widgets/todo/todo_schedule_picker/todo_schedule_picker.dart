@@ -64,13 +64,13 @@ class TodoSchedulePicker extends StatelessWidget {
               CalendarDatePicker(
                   initialDate: dueDate,
                   lastDate: DateTime(2075, 12, 31),
-                  firstDate: DateTime.now(),
+                  firstDate: dueDate ?? DateTime.now(),
                   onDateChanged: (date) {
                     // print(date);
                     selectedDate = date;
                     // setDueDate!(date);
                     print("done");
-                  })
+                  }),
             ]),
           )
         ]));

@@ -1,24 +1,36 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 // import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:todolong/models/todo.dart';
+import 'package:todolong/providers/todo_provider.dart';
+import 'package:todolong/widgets/todo/carousel/carousel.dart';
 import 'package:todolong/widgets/todo/todo_item/todo_item.dart';
 import 'package:todolong/widgets/todo/todo_item/todo_priority_circle.dart';
+import 'package:todolong/widgets/todo/todo_schedule_picker/todo_schedule_picker.dart';
 
-class TodoItemDetail extends StatefulWidget {
+// class  extends StatefulWidget {
+
+//   @override
+//   State<TodoItemDetail> createState() => _TodoItemDetailState();
+// }
+
+class TodoItemDetail extends StatelessWidget {
   final Todo todo;
   // const TodoItemDetail({super.key});
   const TodoItemDetail({super.key, required this.todo});
 
-  @override
-  State<TodoItemDetail> createState() => _TodoItemDetailState();
-}
+  Widget itemGap() {
+    return const SizedBox(
+      width: 20,
+    );
+  }
 
-class _TodoItemDetailState extends State<TodoItemDetail> {
   @override
   Widget build(BuildContext context) {
-    double columnGap = MediaQuery.of(context).size.height * 0.02;
+    double columnGap = MediaQuery.of(context).size.height * 0.025;
+
     return Expanded(
       child: SingleChildScrollView(
         child: Container(
@@ -34,8 +46,38 @@ class _TodoItemDetailState extends State<TodoItemDetail> {
             buildSchedule(context),
             SizedBox(height: columnGap),
             buildPriorityChoosing(context),
-            SizedBox(height: 5),
-            buildCarousel(),
+            SizedBox(height: columnGap / 2),
+            // buildCarousel(),
+            Carousel(
+              // dueDate: todo.dueDate,
+              // priority: todo.priority,
+              reminder: todo.reminder,
+              // setDueDate: (DateTime? date) {
+              //   final newTodo = todo;
+              //   newTodo.dueDate = date;
+              //   Provider.of<TodoProvider>(context, listen: false)
+              //       .updateTodo(todo.id!, newTodo);
+              //   print("setted DueDate");
+              //   print(date);
+              // },
+              // setPriority: (int? priority) {
+              //   final newTodo = todo;
+              //   newTodo.priority = priority!;
+              //   Provider.of<TodoProvider>(context, listen: false)
+              //       .updateTodo(todo.id!, newTodo);
+              //   print("setPriority");
+              //   print(priority);
+              // },
+              setReminder: (Duration? reminder) {
+                final newTodo = todo;
+                newTodo.reminder = reminder;
+                Provider.of<TodoProvider>(context, listen: false)
+                    .updateTodo(todo.id!, newTodo);
+                print("setReminder");
+                print(reminder);
+              },
+            ),
+
             // SizedBox(height: columnGap),
             // const Divider(),
             SizedBox(height: 5),
@@ -84,17 +126,23 @@ class _TodoItemDetailState extends State<TodoItemDetail> {
 
   Widget buildPriorityTitle(context) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
             margin: const EdgeInsets.all(1.0),
-            child: TodoPriorityCircle(prior: widget.todo.priority)),
-        const SizedBox(width: 10),
-        Text(
-          widget.todo.title,
-          style: const TextStyle(
-            fontFamily: ".SF Pro Text",
-            fontSize: 18,
+            child: TodoPriorityCircle(prior: todo.priority)),
+        // const SizedBox(width: 10),
+        itemGap(),
+        Flexible(
+          child: Text(
+            todo.title,
+            softWrap: true,
+            style: const TextStyle(
+                fontFamily: ".SF Pro Text",
+                fontSize: 18,
+                fontWeight: FontWeight.bold),
+            overflow: TextOverflow
+                .visible, // Để văn bản có thể tràn ra ngoài và hiển thị đầy đủ
           ),
         )
       ],
@@ -103,26 +151,31 @@ class _TodoItemDetailState extends State<TodoItemDetail> {
 
   Widget buildDescription(context) {
     Widget a;
-    if (widget.todo.description != null) {
-      a = Text(
-        widget.todo.description ?? "",
-        style: const TextStyle(
-          fontFamily: ".SF Pro Text",
-          fontSize: 17,
+    if (todo.description != null) {
+      a = Flexible(
+        child: Text(
+          todo.description ?? "",
+          softWrap: true,
+          style: const TextStyle(
+            fontFamily: ".SF Pro Text",
+            fontSize: 17,
+          ),
+          overflow: TextOverflow
+              .visible, // Để văn bản có thể tràn ra ngoài và hiển thị đầy đủ
         ),
       );
     } else {
       a = Container();
     }
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Icon(
           Icons.format_list_bulleted,
           size: 24,
           color: Colors.black38,
         ),
-        const SizedBox(width: 10),
+        const SizedBox(width: 20),
         a,
         const Divider()
       ],
@@ -130,40 +183,65 @@ class _TodoItemDetailState extends State<TodoItemDetail> {
   }
 
   Widget buildSchedule(BuildContext context) {
-    Color? color = Colors.black38;
-    String dateString = widget.todo.dueDate == null
-        ? "Due Date"
-        : DateFormat('dd MMM - EEEE').format(widget.todo.dueDate!);
+    Color iconColor = Colors.black;
+    Color textColor = Colors.black;
+    String labelText = "Today";
 
-    if (widget.todo.dueDate != null) {
+    if (todo.dueDate != null) {
       DateTime today = DateTime.now();
       DateTime tomorrow = DateTime(today.year, today.month, today.day + 1);
-      if (widget.todo.dueDate!.isBefore(today)) {
-        // Quá hạn
-        color = Colors.red;
-      } else if (widget.todo.dueDate!.day == today.day &&
-          widget.todo.dueDate!.month == today.month &&
-          widget.todo.dueDate!.year == today.year) {
+
+      if (DateOnlyCompare(todo.dueDate!).isYesterday(today)) {
+        iconColor = Colors.red;
+        textColor = Colors.red;
+        labelText = "Yesterday";
+        // Hôm qua
+      } else if (DateOnlyCompare(todo.dueDate!).isBeforeYesterday()) {
         // Hôm nay
-        color = Colors.green;
-      } else if (widget.todo.dueDate!.day == tomorrow.day &&
-          widget.todo.dueDate!.month == tomorrow.month &&
-          widget.todo.dueDate!.year == tomorrow.year) {
+        iconColor = Colors.red;
+        textColor = Colors.red;
+        labelText = DateFormat('dd MMM').format(todo.dueDate!);
+      } else if (DateOnlyCompare(todo.dueDate!).isSameDate(today)) {
+        // Hôm nay
+        iconColor = Colors.green;
+        textColor = Colors.green;
+        labelText = "Today";
+      } else if (DateOnlyCompare(todo.dueDate!).isTomorrow(today)) {
         // Ngày mai
-        color = Colors.yellow.shade800;
-      } else {
-        // Các trường hợp còn lại
-        color = Colors.purple;
+        iconColor = Colors.orange;
+        textColor = Colors.orange;
+        labelText = "Tomorrow";
+      } else if (todo.dueDate!.isAfter(tomorrow)) {
+        // Ngày mai
+        iconColor = Colors.purple;
+        textColor = Colors.purple;
+        labelText = DateFormat('dd MMM').format(todo.dueDate!);
       }
-    } else {
-      color = Colors.grey[600];
     }
 
     return GestureDetector(
       onTap: () {
-        print("xdx");
+        showModalBottomSheet(
+            context: context,
+            isDismissible: true,
+            isScrollControlled: true,
+            useRootNavigator: true,
+            enableDrag: true,
+            backgroundColor: Colors.transparent,
+            builder: (context) {
+              return TodoSchedulePicker(
+                dueDate: todo.dueDate,
+                setDueDate: (date) {
+                  final newTodo = todo;
+                  newTodo.dueDate = date;
+                  Provider.of<TodoProvider>(context, listen: false)
+                      .updateTodo(todo.id!, newTodo);
+                },
+              );
+            });
       },
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
             width: 24,
@@ -171,13 +249,15 @@ class _TodoItemDetailState extends State<TodoItemDetail> {
             child: Icon(
               Icons.calendar_today_outlined,
               size: 26,
-              color: color,
+              color: iconColor,
+              weight: 8,
             ),
           ),
-          const SizedBox(
-            width: 10,
-          ),
-          Text(dateString,
+          itemGap(),
+          // const SizedBox(
+          //   width: 10,
+          // ),
+          Text(labelText,
               style: const TextStyle(
                 fontFamily: ".SF Pro Text",
                 fontSize: 17,
@@ -189,15 +269,15 @@ class _TodoItemDetailState extends State<TodoItemDetail> {
 
   Widget buildPriorityChoosing(context) {
     Color color;
-    switch (widget.todo.priority) {
+    switch (todo.priority) {
       case 1:
-        color = Colors.red;
+        color = const Color(0xFFD1453A);
         break;
       case 2:
-        color = Colors.yellow;
+        color = const Color(0xFFEC8711);
         break;
       case 3:
-        color = Colors.green;
+        color = Colors.blue;
         break;
       case 4:
         color = Colors.grey;
@@ -209,7 +289,7 @@ class _TodoItemDetailState extends State<TodoItemDetail> {
 
     return GestureDetector(
       onTap: () {
-        showPriorityActionSheet(context, widget.todo.priority);
+        showPriorityActionSheet(context, todo.priority);
       },
       child: Row(
         children: [
@@ -218,8 +298,9 @@ class _TodoItemDetailState extends State<TodoItemDetail> {
             size: 24,
             color: color,
           ),
-          const SizedBox(width: 10),
-          Text('Priority ${widget.todo.priority}',
+          // const SizedBox(width: 10),
+          itemGap(),
+          Text('Priority ${todo.priority}',
               style: const TextStyle(
                 fontFamily: ".SF Pro Text",
                 fontSize: 17,
@@ -254,7 +335,11 @@ class _TodoItemDetailState extends State<TodoItemDetail> {
                 ],
               )),
               onPressed: () {
-                widget.todo.priority = 1;
+                final newTodo = todo;
+                newTodo.priority = 1;
+                Provider.of<TodoProvider>(context, listen: false)
+                    .updateTodo(todo.id!, newTodo);
+
                 Navigator.pop(context, 1);
               },
             ),
@@ -277,7 +362,10 @@ class _TodoItemDetailState extends State<TodoItemDetail> {
                 ],
               )),
               onPressed: () {
-                widget.todo.priority = 2;
+                final newTodo = todo;
+                newTodo.priority = 2;
+                Provider.of<TodoProvider>(context, listen: false)
+                    .updateTodo(todo.id!, newTodo);
                 Navigator.pop(context, 2);
               },
             ),
@@ -300,7 +388,10 @@ class _TodoItemDetailState extends State<TodoItemDetail> {
                 ],
               )),
               onPressed: () {
-                widget.todo.priority = 3;
+                final newTodo = todo;
+                newTodo.priority = 3;
+                Provider.of<TodoProvider>(context, listen: false)
+                    .updateTodo(todo.id!, newTodo);
                 Navigator.pop(context, 4);
               },
             ),
@@ -323,7 +414,10 @@ class _TodoItemDetailState extends State<TodoItemDetail> {
                 ],
               )),
               onPressed: () {
-                widget.todo.priority = 4;
+                final newTodo = todo;
+                newTodo.priority = 4;
+                Provider.of<TodoProvider>(context, listen: false)
+                    .updateTodo(todo.id!, newTodo);
                 Navigator.pop(context, 4);
               },
             ),
@@ -414,7 +508,7 @@ class _TodoItemDetailState extends State<TodoItemDetail> {
             // horizontalTitleGap: 0.0,
             // minLeadingWidth: 0,
             child: ExpansionTile(
-                title: Text("Sub-tasks ${widget.todo.subtasks!.length >> 0}",
+                title: Text("Sub-tasks ${todo.subtasks!.length >> 0}",
                     style: const TextStyle(
                       fontFamily: ".SF Pro Text",
                       fontSize: 16,
@@ -423,7 +517,7 @@ class _TodoItemDetailState extends State<TodoItemDetail> {
                     Colors.transparent, // Đặt màu nền khi thu gọn là trong suốt
                 tilePadding: EdgeInsets.zero,
                 // trailing: const SizedBox.shrink(),
-                children: widget.todo.subtasks!.isNotEmpty
+                children: todo.subtasks!.isNotEmpty
                     ? buildSubTasks()
                     : [buildEmptySubtask()]),
           )),
@@ -437,7 +531,7 @@ class _TodoItemDetailState extends State<TodoItemDetail> {
   }
 
   List<Widget> buildSubTasks() {
-    return widget.todo.subtasks!.map((e) {
+    return todo.subtasks!.map((e) {
       return TodoItemWidget(
         todo: e,
         onCloseModal: () {},
@@ -454,7 +548,7 @@ class _TodoItemDetailState extends State<TodoItemDetail> {
       child: Theme(
         data: ThemeData().copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
-          title: Text("Comments ${widget.todo.subtasks!.length >> 0}",
+          title: Text("Comments ${todo.subtasks!.length >> 0}",
               style: const TextStyle(
                 fontFamily: ".SF Pro Text",
                 fontSize: 16,
@@ -467,13 +561,13 @@ class _TodoItemDetailState extends State<TodoItemDetail> {
               EdgeInsets.all(8), // Đặt khoảng cách giữa các children
           children: [
             ListTile(
-              title: Text("Subtask 1"),
+              title: Text("Comment 1"),
             ),
             ListTile(
-              title: Text("Subtask 2"),
+              title: Text("Comment 2"),
             ),
             ListTile(
-              title: Text("Subtask 3"),
+              title: Text("Comment 3"),
             ),
           ],
         ),
@@ -482,6 +576,27 @@ class _TodoItemDetailState extends State<TodoItemDetail> {
   }
 }
 
-// class TodoItemDetail extends StatelessWidget {
-  
-// }
+extension DateOnlyCompare on DateTime {
+  bool isSameDate(DateTime other) {
+    return year == other.year && month == other.month && day == other.day;
+  }
+
+  bool isYesterday(DateTime other) {
+    final yesterday = DateTime.now().subtract(const Duration(days: 1));
+    return year == yesterday.year &&
+        month == yesterday.month &&
+        day == yesterday.day;
+  }
+
+  bool isBeforeYesterday() {
+    final yesterday = DateTime.now().subtract(const Duration(days: 1));
+    return isBefore(yesterday);
+  }
+
+  bool isTomorrow(DateTime other) {
+    final tomorrow = DateTime.now().add(const Duration(days: 1));
+    return year == tomorrow.year &&
+        month == tomorrow.month &&
+        day == tomorrow.day;
+  }
+}

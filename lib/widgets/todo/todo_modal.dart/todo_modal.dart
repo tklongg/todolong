@@ -12,8 +12,7 @@ class TodoModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Todo todo =
-        Provider.of<TodoProvider>(context, listen: false).getTodoById(id);
+    final Todo todo = context.watch<TodoProvider>().getTodoById(id);
     print(todo);
     return SizedBox(
         height: MediaQuery.of(context).size.height * 0.8,
@@ -87,7 +86,7 @@ class TodoModal extends StatelessWidget {
           height: 40,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
-            color: Color(0xFFF7f7f7),
+            color: const Color(0xFFF7f7f7),
           ),
           padding: const EdgeInsets.all(5.0),
           child: const Text(

@@ -6,7 +6,7 @@ class TodoProvider extends ChangeNotifier {
     Todo(
       id: 1,
       title: 'Buy groceries',
-      description: 'Go to the supermarket and buy essential items.',
+      description: 'Go to the supermarket and buy essential items lorem loremloremloremloremlorem.',
       priority: 2,
       dueDate: DateTime.now(),
       parentId: null, // Không có parent
@@ -49,6 +49,14 @@ class TodoProvider extends ChangeNotifier {
       description: 'Perform thorough testing.',
       priority: 2,
       dueDate: DateTime.now().add(Duration(days: 1)),
+      parentId: 4, // parentId của công việc này cũng là 4
+    ),
+    Todo(
+      id: 7,
+      title: 'Test the application 2',
+      description: 'Perform thorough testing.',
+      priority: 2,
+      dueDate: DateTime.now().add(Duration(days: -1)),
       parentId: 4, // parentId của công việc này cũng là 4
     ),
   ];
@@ -125,6 +133,33 @@ class TodoProvider extends ChangeNotifier {
       todo.subtasks = _todoList.where((t) => t.parentId == todo.id).toList();
     }
     return tdlist;
+  }
+
+  (List<Todo>, List<Todo>) getTodayTodos2() {
+    List<Todo> todayTodo = [];
+    List<Todo> overdueTodo = [];
+
+    _todoList.forEach((todo) {
+      if (todo.dueDate != null) {
+        if (todo.dueDate!.year == DateTime.now().year &&
+            todo.dueDate!.month == DateTime.now().month &&
+            todo.dueDate!.day == DateTime.now().day) {
+          todayTodo.add(todo);
+        } else if (todo.dueDate!.isBefore(DateTime.now())) {
+          overdueTodo.add(todo);
+        }
+      }
+    });
+
+    for (var todo in todayTodo) {
+      todo.subtasks = _todoList.where((t) => t.parentId == todo.id).toList();
+    }
+
+    for (var todo in overdueTodo) {
+      todo.subtasks = _todoList.where((t) => t.parentId == todo.id).toList();
+    }
+
+    return (todayTodo, overdueTodo);
   }
 
   List<Todo> getAllTodos() {

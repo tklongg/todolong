@@ -77,9 +77,13 @@ class _TodayScreenState extends State<TodayScreen> {
   @override
   Widget build(BuildContext context) {
     List<Todo> todoList = context.watch<TodoProvider>().getTodayTodos();
+    List<Todo> todayTodos;
+    List<Todo> overdueTodos;
+    (todayTodos, overdueTodos) = context.watch<TodoProvider>().getTodayTodos2();
     print("cout<<");
     print(todoList);
     formattedDate = DateFormat('dd MMM - EEEE').format(DateTime.now());
+    bool hasOverdueTasks = overdueTodos.isNotEmpty;
     return CustomScrollView(
       physics: const BouncingScrollPhysics(
         parent: AlwaysScrollableScrollPhysics(),
@@ -100,11 +104,11 @@ class _TodayScreenState extends State<TodayScreen> {
               children: [
                 Container(
                   margin: const EdgeInsets.fromLTRB(14.0, 9.0, 9.0, 9.0),
-                  child: Column(
+                  child: const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 20),
-                      const Text(
+                      SizedBox(height: 20),
+                      Text(
                         'Today',
                         style: TextStyle(
                           fontSize: 30,
@@ -112,29 +116,71 @@ class _TodayScreenState extends State<TodayScreen> {
                           fontWeight: FontWeight.w800,
                         ),
                       ),
-                      const SizedBox(height: 10),
-                      Text(
-                        formattedDate,
-                        style: const TextStyle(
-                            fontSize: 13.5,
-                            fontFamily: '.SF Pro Text',
-                            fontWeight: FontWeight.w500),
-                      ),
+                      SizedBox(height: 10),
                     ],
                   ),
                 ),
-                const Divider(
-                  color: Color(0XFFD0d0d0),
-                ),
-                const SizedBox(height: 20),
+
+                if (hasOverdueTasks)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(14.0, 0, 9.0, 0.0),
+                        child: const Text(
+                          "Overdue task",
+                          style: TextStyle(
+                              fontSize: 13.7,
+                              fontFamily: '.SF Pro Text',
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      const Divider(
+                        color: Color(0XFFD0d0d0),
+                      ),
+                    ],
+                  ),
+
                 Container(
                   margin: const EdgeInsets.all(0),
                   child: ListView.builder(
                     shrinkWrap: true,
-                    itemCount: todoList.length,
+                    itemCount: overdueTodos.length,
                     itemBuilder: (BuildContext context, int index) {
                       return TodoItemWidget(
-                        todo: todoList[index],
+                        todo: overdueTodos[index],
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(14.0, 0, 9.0, 0.0),
+                      child: Text(
+                        formattedDate,
+                        style: const TextStyle(
+                            fontSize: 13.7,
+                            fontFamily: '.SF Pro Text',
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    const Divider(
+                      color: Color(0XFFD0d0d0),
+                    ),
+                  ],
+                ),
+                // const SizedBox(height: 20),
+                Container(
+                  margin: const EdgeInsets.all(0),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: todayTodos.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return TodoItemWidget(
+                        todo: todayTodos[index],
                       );
                     },
                   ),

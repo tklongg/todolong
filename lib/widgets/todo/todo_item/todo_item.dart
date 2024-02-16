@@ -25,6 +25,7 @@ class TodoItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       leading: CupertinoButton(
         padding: const EdgeInsets.all(0),
         onPressed: () {},

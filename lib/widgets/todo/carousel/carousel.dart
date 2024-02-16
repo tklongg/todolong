@@ -58,8 +58,10 @@ class Carousel extends StatelessWidget {
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [
-          ScheduleWidget(dueDate: dueDate, setDueDate: setDueDate),
-          PriorityWidget(priority: priority, setPriority: setPriority),
+          if (setDueDate != null && dueDate != null)
+            ScheduleWidget(dueDate: dueDate, setDueDate: setDueDate),
+          if (setPriority != null && priority != null)
+            PriorityWidget(priority: priority, setPriority: setPriority),
           ReminderWidget(
             reminder: reminder,
             setReminder: setReminder,
