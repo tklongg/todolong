@@ -76,6 +76,7 @@ flutter:
     - assets/todoist_icon.png
     - assets/google_icon.svg
     - assets/comment-bg.jpg
+    - assets/random.gif
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

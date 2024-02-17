@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class LocationWidget extends StatelessWidget {
@@ -30,15 +31,16 @@ class LocationWidget extends StatelessWidget {
                         fontWeight: FontWeight.bold),
                   ),
                   Expanded(
-                    child: Image.asset("random.gif"),
+                    child: Image.asset(
+                        kIsWeb ? "random.gif" : "assets/random.gif"),
                   ),
                   const Text(
                     "Location is not yet developed please stay tune for more",
                     style: TextStyle(
-                        color: Colors.black,
-                        fontFamily: ".SF Pro Text",
-                        fontSize: 16,
-                        ),
+                      color: Colors.black,
+                      fontFamily: ".SF Pro Text",
+                      fontSize: 16,
+                    ),
                   )
                 ]),
               ),

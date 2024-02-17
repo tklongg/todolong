@@ -58,14 +58,6 @@ class _AddTodoState extends State<AddTodo> {
   }
 
   void submit() {
-    print("submit");
-    print("parentId ${widget.parentId}");
-    print("title ${title}");
-    print("description ${description}");
-    print("dueDate ${dueDate}");
-    print("reminder ${reminder}");
-    print("priority ${priority}");
-
     final todo = Todo(
         title: title,
         description: description.isEmpty ? null : description,

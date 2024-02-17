@@ -139,7 +139,7 @@ class TodoItemDetail extends StatelessWidget {
             softWrap: true,
             style: const TextStyle(
                 fontFamily: ".SF Pro Text",
-                fontSize: 18,
+                fontSize: 20,
                 fontWeight: FontWeight.bold),
             overflow: TextOverflow
                 .visible, // Để văn bản có thể tràn ra ngoài và hiển thị đầy đủ
@@ -158,7 +158,7 @@ class TodoItemDetail extends StatelessWidget {
           softWrap: true,
           style: const TextStyle(
             fontFamily: ".SF Pro Text",
-            fontSize: 17,
+            fontSize: 18,
           ),
           overflow: TextOverflow
               .visible, // Để văn bản có thể tràn ra ngoài và hiển thị đầy đủ
@@ -295,7 +295,7 @@ class TodoItemDetail extends StatelessWidget {
         children: [
           Icon(
             Icons.flag,
-            size: 24,
+            size: 26,
             color: color,
           ),
           // const SizedBox(width: 10),

@@ -35,7 +35,7 @@ class TodoItemWidget extends StatelessWidget {
         todo.title,
         style: const TextStyle(
           fontFamily: ".SF Pro Text",
-          fontSize: 18,
+          fontSize: 20,
         ),
       ),
       onTap: () {
