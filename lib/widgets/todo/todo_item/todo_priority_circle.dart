@@ -97,6 +97,9 @@ class _TodoPriorityCircleState extends State<TodoPriorityCircle> {
         });
         Timer(const Duration(milliseconds: 500), () {
           widget.handleClick();
+          setState(() {
+            isChecked = false;
+          });
         });
         // setState(() {
         //   isChecked = !isChecked;
