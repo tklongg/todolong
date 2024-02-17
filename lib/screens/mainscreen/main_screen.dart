@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-import 'package:todolong/models/todo.dart';
-import 'package:todolong/providers/todo_provider.dart';
-
 import 'package:todolong/screens/today/today_screen.dart';
+import 'package:todolong/screens/upcoming/upcoming_screen.dart';
 import 'package:todolong/widgets/todo/add_todo/add_todo.dart';
 
 class MainScreen extends StatefulWidget {
@@ -19,7 +16,7 @@ class _MainScreenState extends State<MainScreen> {
   final PageController _pageController = PageController();
   final List<Widget> _screens = [
     const TodayScreen(),
-    InboxScreen(),
+    const UpcomingScreen(),
     SearchScreen(),
     // BrowseScreen(),
   ];

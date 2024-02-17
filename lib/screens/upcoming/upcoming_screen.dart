@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
 
-class UpcoomingScreen extends StatelessWidget {
-  const UpcoomingScreen({super.key});
+class UpcomingScreen extends StatefulWidget {
+  const UpcomingScreen({super.key});
+
+  @override
+  State<UpcomingScreen> createState() => _UpcomingScreenState();
+}
+
+class _UpcomingScreenState extends State<UpcomingScreen> {
+  final loading = true;
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      body: Center(
+        child: Text('Upcoming'),
+      ),
+    );
   }
 }
