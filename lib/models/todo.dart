@@ -13,17 +13,20 @@ class Todo {
   DateTime? dueDate;
   List<Comment>? comments;
   int? parentId;
-  Todo(
-      {this.id,
-      required this.title,
-      this.description,
-      required this.priority,
-      this.reminder,
-      this.location,
-      this.labels,
-      this.subtasks,
-      this.dueDate,
-      this.parentId});
+  int isCompleted = 0;
+  Todo({
+    this.id,
+    required this.title,
+    this.description,
+    required this.priority,
+    this.reminder,
+    this.location,
+    this.labels,
+    this.subtasks,
+    this.dueDate,
+    this.parentId,
+    this.isCompleted = 0,
+  });
 
   Todo.fromJson(Map<String, dynamic> json)
       : id = json['id'],
@@ -45,7 +48,8 @@ class Todo {
         dueDate = json['dueDate'] != null
             ? DateTime.parse(json['dueDate'] as String)
             : null,
-        parentId = json['parentId'] as int?;
+        parentId = json['parentId'] as int?,
+        isCompleted = json['isCompleted'] as int;
   Map<String, dynamic> toJson() => {
         'id': id,
         'title': title,
@@ -58,5 +62,6 @@ class Todo {
         'addedDate': addedDate?.toIso8601String(),
         'dueDate': dueDate?.toIso8601String(),
         'parentId': parentId,
+        'isCompleted': isCompleted,
       };
 }

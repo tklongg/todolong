@@ -50,8 +50,9 @@ import 'package:todolong/providers/todo_provider.dart';
 // }
 class TodoPriorityCircle extends StatefulWidget {
   final int prior;
-  final VoidCallback? handleClick;
-  const TodoPriorityCircle({Key? key, required this.prior, this.handleClick})
+  final VoidCallback handleClick;
+  const TodoPriorityCircle(
+      {Key? key, required this.prior, required this.handleClick})
       : super(key: key);
 
   @override
@@ -91,11 +92,16 @@ class _TodoPriorityCircleState extends State<TodoPriorityCircle> {
         //   isChecked = true;
         // });
         HapticFeedback.vibrate();
-
         setState(() {
-          isChecked = !isChecked;
+          isChecked = true;
         });
-        widget.handleClick!();
+        Timer(const Duration(milliseconds: 500), () {
+          widget.handleClick();
+        });
+        // setState(() {
+        //   isChecked = !isChecked;
+        // });
+        // widget.handleClick();
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 100),

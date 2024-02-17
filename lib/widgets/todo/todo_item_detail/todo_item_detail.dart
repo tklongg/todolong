@@ -130,7 +130,14 @@ class TodoItemDetail extends StatelessWidget {
       children: [
         Container(
             margin: const EdgeInsets.all(1.0),
-            child: TodoPriorityCircle(prior: todo.priority)),
+            child: TodoPriorityCircle(
+              prior: todo.priority,
+              handleClick: () {
+                Provider.of<TodoProvider>(context, listen: false)
+                    .completeTodo(todo.id!);
+                // Navigator.pop(context);
+              },
+            )),
         // const SizedBox(width: 10),
         itemGap(),
         Flexible(

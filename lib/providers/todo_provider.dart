@@ -6,10 +6,12 @@ class TodoProvider extends ChangeNotifier {
     Todo(
       id: 1,
       title: 'Buy groceries',
-      description: 'Go to the supermarket and buy essential items lorem loremloremloremloremlorem.',
+      description:
+          'Go to the supermarket and buy essential items lorem loremloremloremloremlorem.',
       priority: 2,
       dueDate: DateTime.now(),
-      parentId: null, // Không có parent
+      parentId: null,
+      isCompleted: 0, // Không có parent
     ),
     Todo(
       id: 2,
@@ -17,6 +19,7 @@ class TodoProvider extends ChangeNotifier {
       description: 'Get fresh vegetables for the week.',
       priority: 1,
       dueDate: DateTime.now().add(const Duration(days: 1)),
+      isCompleted: 0, // Không có parent
       parentId: 1, // parentId của công việc này là 1
     ),
     Todo(
@@ -25,6 +28,7 @@ class TodoProvider extends ChangeNotifier {
       description: 'Get a variety of fruits.',
       priority: 1,
       dueDate: DateTime.now().add(Duration(days: 1)),
+      isCompleted: 0, // Không có parent
       parentId: 1, // parentId của công việc này cũng là 1
     ),
     Todo(
@@ -33,6 +37,7 @@ class TodoProvider extends ChangeNotifier {
       description: 'Finish the coding project by the deadline.',
       priority: 3,
       dueDate: DateTime.now(),
+      isCompleted: 0, // Không có parent
       parentId: null, // Không có parent
     ),
     Todo(
@@ -41,6 +46,7 @@ class TodoProvider extends ChangeNotifier {
       description: 'Implement the required features.',
       priority: 2,
       dueDate: DateTime.now().add(const Duration(days: 1)),
+      isCompleted: 0, // Không có parent
       parentId: 4, // parentId của công việc này là 4
     ),
     Todo(
@@ -49,6 +55,7 @@ class TodoProvider extends ChangeNotifier {
       description: 'Perform thorough testing.',
       priority: 2,
       dueDate: DateTime.now().add(Duration(days: 1)),
+      isCompleted: 0, // Không có parent
       parentId: 4, // parentId của công việc này cũng là 4
     ),
     Todo(
@@ -57,6 +64,7 @@ class TodoProvider extends ChangeNotifier {
       description: 'Perform thorough testing.',
       priority: 2,
       dueDate: DateTime.now().add(Duration(days: -1)),
+      isCompleted: 0, // Không có parent
       parentId: 4, // parentId của công việc này cũng là 4
     ),
   ];
@@ -140,7 +148,7 @@ class TodoProvider extends ChangeNotifier {
     List<Todo> overdueTodo = [];
 
     _todoList.forEach((todo) {
-      if (todo.dueDate != null) {
+      if (todo.dueDate != null && todo.isCompleted == 0) {
         if (todo.dueDate!.year == DateTime.now().year &&
             todo.dueDate!.month == DateTime.now().month &&
             todo.dueDate!.day == DateTime.now().day) {
@@ -198,6 +206,14 @@ class TodoProvider extends ChangeNotifier {
     int index = _todoList.indexWhere((todo) => todo.id == id);
     if (index != -1) {
       _todoList[index] = updatedTodo;
+      notifyListeners();
+    }
+  }
+
+  void completeTodo(int id) {
+    int index = _todoList.indexWhere((todo) => todo.id == id);
+    if (index != -1) {
+      _todoList[index].isCompleted = 1;
       notifyListeners();
     }
   }
