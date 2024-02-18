@@ -186,6 +186,7 @@ class TodoProvider extends ChangeNotifier {
     for (var todo in tdlist) {
       todo.subtasks = _todoList.where((t) => t.parentId == todo.id).toList();
     }
+    tdlist.sort((a, b) => a.dueDate!.compareTo(b.dueDate!));
     return tdlist;
   }
 
