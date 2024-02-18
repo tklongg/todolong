@@ -8,6 +8,7 @@ import 'package:todolong/providers/todo_provider.dart';
 import 'package:todolong/widgets/todo/carousel/carousel.dart';
 import 'package:todolong/widgets/todo/todo_item/todo_item.dart';
 import 'package:todolong/widgets/todo/todo_item/todo_priority_circle.dart';
+import 'package:todolong/widgets/todo/todo_item_detail/todo_change_title_desc.dart';
 import 'package:todolong/widgets/todo/todo_schedule_picker/todo_schedule_picker.dart';
 
 // class  extends StatefulWidget {
@@ -30,7 +31,7 @@ class TodoItemDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double columnGap = MediaQuery.of(context).size.height * 0.025;
-
+    print(MediaQuery.of(context).size.height);
     return Expanded(
       child: SingleChildScrollView(
         child: Container(
@@ -49,25 +50,7 @@ class TodoItemDetail extends StatelessWidget {
             SizedBox(height: columnGap / 2),
             // buildCarousel(),
             Carousel(
-              // dueDate: todo.dueDate,
-              // priority: todo.priority,
               reminder: todo.reminder,
-              // setDueDate: (DateTime? date) {
-              //   final newTodo = todo;
-              //   newTodo.dueDate = date;
-              //   Provider.of<TodoProvider>(context, listen: false)
-              //       .updateTodo(todo.id!, newTodo);
-              //   print("setted DueDate");
-              //   print(date);
-              // },
-              // setPriority: (int? priority) {
-              //   final newTodo = todo;
-              //   newTodo.priority = priority!;
-              //   Provider.of<TodoProvider>(context, listen: false)
-              //       .updateTodo(todo.id!, newTodo);
-              //   print("setPriority");
-              //   print(priority);
-              // },
               setReminder: (Duration? reminder) {
                 final newTodo = todo;
                 newTodo.reminder = reminder;
@@ -80,9 +63,9 @@ class TodoItemDetail extends StatelessWidget {
 
             // SizedBox(height: columnGap),
             // const Divider(),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             buildSubtaskArea(),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             buildCommentArea(),
             Container(
               // decoration: BoxDecoration(
@@ -90,28 +73,6 @@ class TodoItemDetail extends StatelessWidget {
               // ),
               height: MediaQuery.of(context).size.height * 0.2,
             )
-            // Text("comments (show latest)"),
-            // Text("comments (show latest)"),
-            // Text("comments (show latest)"),
-            // Text("comments (show latest)"),
-            // Text("comments (show latest)"),
-            // Text("comments (show latest)"),
-            // Text("comments (show latest)"),
-            // Text("comments (show latest)"),
-            // Text("comments (show latest)"),
-            // Text("comments (show latest)"),
-            // Text("comments (show latest)"),
-            // Text("comments (show latest)"),
-            // Text("comments (show latest)"),
-            // Text("comments (show latest)"),
-            // Text("comments (show latest)"),
-            // Text("comments (show latest)"),
-            // Text("comments (show latest)"),
-            // Text("comments (show latest)"),
-            // Text("comments (show latest)"),
-            // Text("comments (show latest)"),
-            // Text("comments (show latest)"),
-            // Text("comments (show latest)"),
           ]),
         ),
       ),
@@ -125,6 +86,7 @@ class TodoItemDetail extends StatelessWidget {
   }
 
   Widget buildPriorityTitle(context) {
+    print(MediaQuery.of(context).size.height);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -140,35 +102,65 @@ class TodoItemDetail extends StatelessWidget {
             )),
         // const SizedBox(width: 10),
         itemGap(),
+
         Flexible(
-          child: Text(
-            todo.title,
-            softWrap: true,
-            style: const TextStyle(
-                fontFamily: ".SF Pro Text",
-                fontSize: 20,
-                fontWeight: FontWeight.bold),
-            overflow: TextOverflow
-                .visible, // Để văn bản có thể tràn ra ngoài và hiển thị đầy đủ
+          child: GestureDetector(
+            onTap: () {
+              showChangeTitleModal(context);
+            },
+            child: Text(
+              todo.title,
+              softWrap: true,
+              style: const TextStyle(
+                  fontFamily: ".SF Pro Text",
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
+              overflow: TextOverflow
+                  .visible, // Để văn bản có thể tràn ra ngoài và hiển thị đầy đủ
+            ),
           ),
-        )
+        ),
       ],
     );
+  }
+
+  void showChangeTitleModal(
+    BuildContext context,
+  ) {
+    void saveChange(String title, String desc) {
+      final newTodo = todo;
+      newTodo.title = title;
+      newTodo.description = desc;
+      Provider.of<TodoProvider>(context, listen: false)
+          .updateTodo(todo.id!, newTodo);
+    }
+
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return TodoChangeTitleDesc(
+              description: todo.description!, title: todo.title,save: saveChange);
+        });
   }
 
   Widget buildDescription(context) {
     Widget a;
     if (todo.description != null) {
       a = Flexible(
-        child: Text(
-          todo.description ?? "",
-          softWrap: true,
-          style: const TextStyle(
-            fontFamily: ".SF Pro Text",
-            fontSize: 18,
+        child: GestureDetector(
+          onTap: () {
+            showChangeTitleModal(context);
+          },
+          child: Text(
+            todo.description ?? "",
+            softWrap: true,
+            style: const TextStyle(
+              fontFamily: ".SF Pro Text",
+              fontSize: 18,
+            ),
+            overflow: TextOverflow
+                .visible, // Để văn bản có thể tràn ra ngoài và hiển thị đầy đủ
           ),
-          overflow: TextOverflow
-              .visible, // Để văn bản có thể tràn ra ngoài và hiển thị đầy đủ
         ),
       );
     } else {
