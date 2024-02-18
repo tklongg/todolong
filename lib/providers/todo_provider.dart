@@ -67,6 +67,15 @@ class TodoProvider extends ChangeNotifier {
       isCompleted: 0, // Không có parent
       parentId: 4, // parentId của công việc này cũng là 4
     ),
+    Todo(
+      id: 7,
+      title: 'Test the application 2',
+      description: 'Perform thorough testing.',
+      priority: 2,
+      dueDate: DateTime.now().add(Duration(days: 30)),
+      isCompleted: 0, // Không có parent
+      parentId: null, // parentId của công việc này cũng là 4
+    ),
   ];
 
   // TodoProvider() {
@@ -135,8 +144,18 @@ class TodoProvider extends ChangeNotifier {
             todo.dueDate!.month == DateTime.now().month &&
             todo.dueDate!.day == DateTime.now().day)
         .toList();
+    tdlist.sort((a, b) {
+      if (a.priority != b.priority) {
+        return b.priority
+            .compareTo(a.priority); // Sắp xếp theo ưu tiên giảm dần
+      } else {
+        return a.addedDate!.compareTo(
+            b.addedDate!); // Nếu ưu tiên bằng nhau, sắp xếp theo addedDate
+      }
+    });
     print(_todoList);
     print(tdlist);
+
     for (var todo in tdlist) {
       todo.subtasks = _todoList.where((t) => t.parentId == todo.id).toList();
     }
@@ -147,7 +166,7 @@ class TodoProvider extends ChangeNotifier {
     List<Todo> todayTodo = [];
     List<Todo> overdueTodo = [];
 
-    _todoList.forEach((todo) {
+    for (var todo in _todoList) {
       if (todo.dueDate != null && todo.isCompleted == 0) {
         if (todo.dueDate!.year == DateTime.now().year &&
             todo.dueDate!.month == DateTime.now().month &&
@@ -157,8 +176,25 @@ class TodoProvider extends ChangeNotifier {
           overdueTodo.add(todo);
         }
       }
+    }
+    todayTodo.sort((a, b) {
+      if (a.priority != b.priority) {
+        return a.priority
+            .compareTo(b.priority); // Sắp xếp theo ưu tiên giảm dần
+      } else {
+        return a.addedDate!.compareTo(
+            b.addedDate!); // Nếu ưu tiên bằng nhau, sắp xếp theo addedDate
+      }
     });
-
+    overdueTodo.sort((a, b) {
+      if (a.priority != b.priority) {
+        return a.priority
+            .compareTo(b.priority); // Sắp xếp theo ưu tiên giảm dần
+      } else {
+        return a.addedDate!.compareTo(
+            b.addedDate!); // Nếu ưu tiên bằng nhau, sắp xếp theo addedDate
+      }
+    });
     for (var todo in todayTodo) {
       todo.subtasks = _todoList.where((t) => t.parentId == todo.id).toList();
     }
@@ -175,6 +211,15 @@ class TodoProvider extends ChangeNotifier {
     for (var todo in tdlist) {
       todo.subtasks = _todoList.where((t) => t.parentId == todo.id).toList();
     }
+    tdlist.sort((a, b) {
+      if (a.priority != b.priority) {
+        return a.priority
+            .compareTo(b.priority); // Sắp xếp theo ưu tiên giảm dần
+      } else {
+        return a.addedDate!.compareTo(
+            b.addedDate!); // Nếu ưu tiên bằng nhau, sắp xếp theo addedDate
+      }
+    });
     return tdlist;
   }
 
@@ -186,7 +231,17 @@ class TodoProvider extends ChangeNotifier {
     for (var todo in tdlist) {
       todo.subtasks = _todoList.where((t) => t.parentId == todo.id).toList();
     }
-    tdlist.sort((a, b) => a.dueDate!.compareTo(b.dueDate!));
+
+    // tdlist.sort((a, b) => a.dueDate!.compareTo(b.dueDate!));
+    tdlist.sort((a, b) {
+      if (a.priority != b.priority) {
+        return a.priority
+            .compareTo(b.priority); // Sắp xếp theo ưu tiên giảm dần
+      } else {
+        return a.addedDate!.compareTo(
+            b.addedDate!); // Nếu ưu tiên bằng nhau, sắp xếp theo addedDate
+      }
+    });
     return tdlist;
   }
 

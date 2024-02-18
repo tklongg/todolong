@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:todolong/screens/all/all_todo.dart';
 import 'package:todolong/screens/today/today_screen.dart';
 import 'package:todolong/screens/upcoming/upcoming_screen.dart';
 import 'package:todolong/widgets/todo/add_todo/add_todo.dart';
@@ -17,7 +18,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _screens = [
     const TodayScreen(),
     const UpcomingScreen(),
-    SearchScreen(),
+    const AllTodoScreen(),
     // BrowseScreen(),
   ];
   @override
@@ -63,7 +64,7 @@ class _MainScreenState extends State<MainScreen> {
               label: 'Upcoming',
             ),
             const BottomNavigationBarItem(
-              icon: Icon(Icons.search),
+              icon: Icon(Icons.all_inbox),
               label: 'All',
             ),
             // const BottomNavigationBarItem(
@@ -84,70 +85,7 @@ class _MainScreenState extends State<MainScreen> {
             color: Colors.white,
           ),
         ));
-    // return ChangeNotifierProvider(
-    //     create: ((context) => TodoProvider()),
-    //     child: Scaffold(
-    //         resizeToAvoidBottomInset: false,
-    //         body: SafeArea(
-    //             child: PageView(
-    //           controller: _pageController,
-    //           physics: const NeverScrollableScrollPhysics(),
-    //           children: _screens,
-    //           onPageChanged: (index) {
-    //             setState(() {
-    //               _currentIndex = index;
-    //             });
-    //           },
-    //         )),
-    //         bottomNavigationBar: BottomNavigationBar(
-    //           type: BottomNavigationBarType.fixed,
-    //           currentIndex: _currentIndex,
-    //           selectedItemColor: const Color(0xFFD74638),
-    //           selectedLabelStyle: const TextStyle(color: Color(0xFFD74638)),
-    //           onTap: (index) {
-    //             _pageController.animateToPage(
-    //               index,
-    //               duration: const Duration(milliseconds: 150),
-    //               curve: Curves.linearToEaseOut,
-    //             );
-    //           }
-    //           // onTap: (index) {
-    //           //   setState(() {
-    //           //     _currentIndex = index;
-    //           //   });
-    //           // }
-    //           ,
-    //           items: [
-    //             BottomNavigationBarItem(
-    //               icon: buildTodayIcon(),
-    //               label: 'Today',
-    //             ),
-    //             const BottomNavigationBarItem(
-    //               icon: Icon(Icons.inbox),
-    //               label: 'Upcoming',
-    //             ),
-    //             const BottomNavigationBarItem(
-    //               icon: Icon(Icons.search),
-    //               label: 'All',
-    //             ),
-    //             // const BottomNavigationBarItem(
-    //             //   icon: Icon(Icons.list_alt_rounded),
-    //             //   label: 'Browse',
-    //             // ),
-    //           ],
-    //         ),
-    //         floatingActionButton: FloatingActionButton(
-    //           onPressed: () {
-    //             showAddTodo();
-    //           },
-    //           shape: const CircleBorder(
-    //               side: BorderSide(color: Color.fromARGB(0, 255, 255, 255))),
-    //           backgroundColor: const Color(0xFFD74638),
-    //           child: const Icon(
-    //             Icons.add,
-    //             color: Colors.white,
-    //           ),
-    //         )));
+    
   }
 
   void showAddTodo() {

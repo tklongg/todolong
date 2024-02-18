@@ -15,6 +15,24 @@ class TodayScreen extends StatefulWidget {
 
 class _TodayScreenState extends State<TodayScreen> {
   String formattedDate = '';
+  bool showTitle = false;
+  final ScrollController _controller = ScrollController();
+  void _scrollListener() {
+    if (_controller.offset >= MediaQuery.of(context).size.height * 0.1 &&
+        !showTitle) {
+      setState(() {
+        showTitle = true;
+      });
+      print('Reached the threshold!');
+    } else if (_controller.offset < MediaQuery.of(context).size.height * 0.1 &&
+        showTitle) {
+      setState(() {
+        showTitle = false;
+      });
+      print('Not reach the threshold!');
+    }
+  }
+
   // bool isModalOpen = false;
   @override
   Widget build(BuildContext context) {
@@ -28,6 +46,18 @@ class _TodayScreenState extends State<TodayScreen> {
       setState(() {
         print("refreshed");
       });
+    }
+
+    @override
+    void initState() {
+      super.initState();
+      _controller.addListener(_scrollListener);
+    }
+
+    @override
+    void dispose() {
+      _controller.dispose();
+      super.dispose();
     }
 
     formattedDate = DateFormat('dd MMM - EEEE').format(DateTime.now());
@@ -46,29 +76,78 @@ class _TodayScreenState extends State<TodayScreen> {
             // Add your refresh logic here
           },
         ),
+        if (showTitle) ...{
+          SliverAppBar(
+            title: const Center(
+                child: Text('Todo', style: TextStyle(fontSize: 20))),
+
+            expandedHeight: MediaQuery.of(context).size.height * 0.05,
+            // Không bật động tác tự động co/expand
+            floating: false,
+
+            pinned: true,
+
+            backgroundColor: Colors.white,
+
+            flexibleSpace: const FlexibleSpaceBar(
+              centerTitle: true,
+            ),
+          ),
+        } else ...{
+          SliverAppBar(
+            toolbarHeight: MediaQuery.of(context).size.height * 0.1,
+            title: Container(
+              margin: const EdgeInsets.fromLTRB(0, 1, 9.0, 9.0),
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 20),
+                  Text(
+                    'Todo',
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontFamily: '.SF Pro Text',
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  // SizedBox(height: 20),
+                ],
+              ),
+            ),
+
+            expandedHeight: MediaQuery.of(context).size.height * 0.05,
+            // Không bật động tác tự động co/expand
+
+            backgroundColor: Colors.white,
+
+            flexibleSpace: const FlexibleSpaceBar(
+              centerTitle: true,
+            ),
+          ),
+        },
         SliverToBoxAdapter(
           child: Container(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  margin: const EdgeInsets.fromLTRB(14.0, 9.0, 9.0, 9.0),
-                  child: const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 20),
-                      Text(
-                        'Today',
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontFamily: '.SF Pro Text',
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                    ],
-                  ),
-                ),
+                // Container(
+                //   margin: const EdgeInsets.fromLTRB(14.0, 9.0, 9.0, 9.0),
+                //   child: const Column(
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     children: [
+                //       SizedBox(height: 20),
+                //       Text(
+                //         'Today',
+                //         style: TextStyle(
+                //           fontSize: 30,
+                //           fontFamily: '.SF Pro Text',
+                //           fontWeight: FontWeight.w800,
+                //         ),
+                //       ),
+                //       SizedBox(height: 10),
+                //     ],
+                //   ),
+                // ),
 
                 if (hasOverdueTasks)
                   Column(
@@ -142,4 +221,3 @@ class _TodayScreenState extends State<TodayScreen> {
     );
   }
 }
-
