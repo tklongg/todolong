@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todolong/models/todo.dart';
-import 'package:todolong/providers/todo_provider.dart';
+import 'package:todolong/providers/todo_provider_pref.dart';
 import 'package:todolong/widgets/todo/carousel/carousel.dart';
 
 class AddTodo extends StatefulWidget {

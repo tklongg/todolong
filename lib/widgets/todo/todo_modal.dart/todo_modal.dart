@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todolong/models/todo.dart';
-import 'package:todolong/providers/todo_provider.dart';
+import 'package:todolong/providers/todo_provider_pref.dart';
 import 'package:todolong/widgets/today/comment_modal.dart';
 import 'package:todolong/widgets/todo/todo_item_detail/todo_item_detail.dart';
 

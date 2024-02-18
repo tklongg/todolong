@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:todolong/models/todo.dart';
-import 'package:todolong/providers/todo_provider.dart';
+import 'package:todolong/providers/todo_provider_pref.dart';
 
 import 'package:todolong/widgets/todo/todo_item/todo_priority_circle.dart';
 import 'package:todolong/widgets/todo/todo_modal.dart/todo_modal.dart';
@@ -38,7 +38,7 @@ class TodoItemWidget extends StatelessWidget {
                 Provider.of<TodoProvider>(context, listen: false)
                     .deleteTodo(todo.id!);
               },
-              backgroundColor: Color(0xFFD1453A),
+              backgroundColor: const Color(0xFFD1453A),
               foregroundColor: Colors.white,
               icon: Icons.delete,
               label: 'Delete',
@@ -64,7 +64,6 @@ class TodoItemWidget extends StatelessWidget {
                 Provider.of<TodoProvider>(context, listen: false)
                     .completeTodo(todo.id!);
                 print(todo.id!);
-                ;
               },
             ),
           ),

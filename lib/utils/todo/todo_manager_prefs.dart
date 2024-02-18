@@ -1,24 +1,17 @@
 import 'dart:convert';
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todolong/models/todo.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:todolong/utils/strings/compare.dart';
 
 class TodoFileManager {
-  static late String filePath;
-  static late String localStorageName;
-  Future<String> _getLocalPath() async {
-    Directory? directory = Platform.isAndroid
-        ? await getExternalStorageDirectory() //FOR ANDROID
-        : await getApplicationSupportDirectory(); //FOR iOS
-    return directory!.path;
+  late SharedPreferences _prefs;
+
+  TodoFileManager() {
+    _init();
   }
 
-  Future<File> get _localFile async {
-    final path = await _getLocalPath();
-    return File('$path/todosLocal.dat');
+  Future<void> _init() async {
+    _prefs = await SharedPreferences.getInstance();
   }
 
   Future<void> addTodo(Todo todo) async {
@@ -94,18 +87,9 @@ class TodoFileManager {
 
   Future<List<Todo>> readTodos() async {
     try {
-      if (kIsWeb) {
-        // final jsonString = html.window.localStorage["todosLocal"];
-      }
-      final file = await _localFile;
-      // final file = File(TodoManager.filePath);
-      if (file.existsSync()) {
-        final jsonString = await file.readAsString();
-        final List<dynamic> jsonList = jsonDecode(jsonString);
-        return jsonList.map((json) => Todo.fromJson(json)).toList();
-      } else {
-        return [];
-      }
+      final jsonString = _prefs.getString('todos') ?? '[]';
+      final List<dynamic> jsonList = jsonDecode(jsonString);
+      return jsonList.map((json) => Todo.fromJson(json)).toList();
     } catch (e) {
       print('Error reading todos: $e');
       return [];
@@ -115,8 +99,7 @@ class TodoFileManager {
   Future<void> _writeTodos(List<Todo> todos) async {
     final jsonTodos = todos.map((todo) => todo.toJson()).toList();
     final jsonString = jsonEncode(jsonTodos);
-    final file = await _localFile;
-    await file.writeAsString(jsonString);
+    await _prefs.setString('todos', jsonString);
   }
 
   bool isSameDay(DateTime? date1, DateTime date2) {

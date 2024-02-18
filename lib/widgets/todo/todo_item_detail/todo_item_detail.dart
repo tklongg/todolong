@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 // import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:todolong/models/todo.dart';
-import 'package:todolong/providers/todo_provider.dart';
+import 'package:todolong/providers/todo_provider_pref.dart';
 import 'package:todolong/widgets/todo/carousel/carousel.dart';
 import 'package:todolong/widgets/todo/todo_item/todo_item.dart';
 import 'package:todolong/widgets/todo/todo_item/todo_priority_circle.dart';
