@@ -286,10 +286,11 @@ class TodoProvider extends ChangeNotifier {
     Map<DateTime, List<Todo>> groupedTodos = {};
     List<Todo> tdlist = List.from(_todoList);
 
-    tdlist
+    tdlist = tdlist
         .where((todo) =>
-            (todo.dueDate!.isAfter(DateTime.now()) && todo.isCompleted == 0))
+            todo.dueDate!.isAfter(DateTime.now()) && todo.isCompleted == 0)
         .toList();
+
     for (var todo in tdlist) {
       todo.subtasks = _todoList.where((t) => t.parentId == todo.id).toList();
     }

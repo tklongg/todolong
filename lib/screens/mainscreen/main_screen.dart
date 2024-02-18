@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:todolong/screens/all/all_todo.dart';
 import 'package:todolong/screens/today/today_screen.dart';
 import 'package:todolong/screens/upcoming/upcoming_screen.dart';
+import 'package:todolong/utils/notification/notification_service.dart';
 import 'package:todolong/widgets/todo/add_todo/add_todo.dart';
 
 class MainScreen extends StatefulWidget {
@@ -75,6 +76,7 @@ class _MainScreenState extends State<MainScreen> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
+            NotificationService().showNotification(title: "ok", body: "ok");
             showAddTodo();
           },
           shape: const CircleBorder(
@@ -85,7 +87,6 @@ class _MainScreenState extends State<MainScreen> {
             color: Colors.white,
           ),
         ));
-    
   }
 
   void showAddTodo() {
