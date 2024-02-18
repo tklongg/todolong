@@ -63,6 +63,8 @@ class TodoItemWidget extends StatelessWidget {
               handleClick: () {
                 Provider.of<TodoProvider>(context, listen: false)
                     .completeTodo(todo.id!);
+                print(todo.id!);
+                ;
               },
             ),
           ),

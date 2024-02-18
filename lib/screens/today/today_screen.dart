@@ -18,19 +18,31 @@ class _TodayScreenState extends State<TodayScreen> {
   bool showTitle = false;
   final ScrollController _controller = ScrollController();
   void _scrollListener() {
-    if (_controller.offset >= MediaQuery.of(context).size.height * 0.1 &&
+    if (_controller.offset >= MediaQuery.of(context).size.height * 0.01 &&
         !showTitle) {
       setState(() {
         showTitle = true;
       });
       print('Reached the threshold!');
-    } else if (_controller.offset < MediaQuery.of(context).size.height * 0.1 &&
+    } else if (_controller.offset < MediaQuery.of(context).size.height * 0.01 &&
         showTitle) {
       setState(() {
         showTitle = false;
       });
       print('Not reach the threshold!');
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   // bool isModalOpen = false;
@@ -46,18 +58,6 @@ class _TodayScreenState extends State<TodayScreen> {
       setState(() {
         print("refreshed");
       });
-    }
-
-    @override
-    void initState() {
-      super.initState();
-      _controller.addListener(_scrollListener);
-    }
-
-    @override
-    void dispose() {
-      _controller.dispose();
-      super.dispose();
     }
 
     formattedDate = DateFormat('dd MMM - EEEE').format(DateTime.now());
@@ -173,6 +173,7 @@ class _TodayScreenState extends State<TodayScreen> {
                   margin: const EdgeInsets.all(0),
                   child: ListView.builder(
                     shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: overdueTodos.length,
                     itemBuilder: (BuildContext context, int index) {
                       return TodoItemWidget(
@@ -205,6 +206,7 @@ class _TodayScreenState extends State<TodayScreen> {
                   margin: const EdgeInsets.all(0),
                   child: ListView.builder(
                     shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: todayTodos.length,
                     itemBuilder: (BuildContext context, int index) {
                       return TodoItemWidget(

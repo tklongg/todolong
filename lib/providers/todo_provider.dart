@@ -68,69 +68,34 @@ class TodoProvider extends ChangeNotifier {
       parentId: 4, // parentId của công việc này cũng là 4
     ),
     Todo(
-      id: 7,
+      id: 8,
       title: 'Test the application 2',
       description: 'Perform thorough testing.',
       priority: 2,
-      dueDate: DateTime.now().add(Duration(days: 30)),
+      dueDate: DateTime.now().add(Duration(days: 7)),
+      isCompleted: 0, // Không có parent
+      parentId: null, // parentId của công việc này cũng là 4
+    ),
+    Todo(
+      id: 9,
+      title: 'Test the application 2',
+      description: 'Perform thorough testing.',
+      priority: 2,
+      dueDate: DateTime.now().add(Duration(days: 8)),
+      isCompleted: 0, // Không có parent
+      parentId: null, // parentId của công việc này cũng là 4
+    ),
+    Todo(
+      id: 10,
+      title: 'Test the application 2',
+      description: 'Perform thorough testing.',
+      priority: 2,
+      dueDate: DateTime.now().add(Duration(days: 9)),
       isCompleted: 0, // Không có parent
       parentId: null, // parentId của công việc này cũng là 4
     ),
   ];
 
-  // TodoProvider() {
-  //   // Khởi tạo danh sách công việc ở đây, hoặc bạn có thể load từ một nguồn dữ liệu khác.
-  //   _todoList = [
-  //     Todo(
-  //       id: 1,
-  //       title: 'Buy groceries',
-  //       description: 'Go to the supermarket and buy essential items.',
-  //       priority: 2,
-  //       dueDate: DateTime.now().add(const Duration(days: 1)),
-  //       parentId: null, // Không có parent
-  //     ),
-  //     Todo(
-  //       id: 2,
-  //       title: 'Buy vegetables',
-  //       description: 'Get fresh vegetables for the week.',
-  //       priority: 1,
-  //       dueDate: DateTime.now().add(const Duration(days: 1)),
-  //       parentId: 1, // parentId của công việc này là 1
-  //     ),
-  //     Todo(
-  //       id: 3,
-  //       title: 'Buy fruits',
-  //       description: 'Get a variety of fruits.',
-  //       priority: 1,
-  //       dueDate: DateTime.now().add(Duration(days: 1)),
-  //       parentId: 1, // parentId của công việc này cũng là 1
-  //     ),
-  //     Todo(
-  //       id: 4,
-  //       title: 'Complete project',
-  //       description: 'Finish the coding project by the deadline.',
-  //       priority: 3,
-  //       dueDate: DateTime.now().add(const Duration(days: 1)),
-  //       parentId: null, // Không có parent
-  //     ),
-  //     Todo(
-  //       id: 5,
-  //       title: 'Write code',
-  //       description: 'Implement the required features.',
-  //       priority: 2,
-  //       dueDate: DateTime.now().add(const Duration(days: 1)),
-  //       parentId: 4, // parentId của công việc này là 4
-  //     ),
-  //     Todo(
-  //       id: 6,
-  //       title: 'Test the application',
-  //       description: 'Perform thorough testing.',
-  //       priority: 2,
-  //       dueDate: DateTime.now().add(Duration(days: 1)),
-  //       parentId: 4, // parentId của công việc này cũng là 4
-  //     ),
-  //   ];
-  // }
   Todo getTodoById(int id) {
     Todo a = _todoList.firstWhere((todo) => todo.id == id);
     a.subtasks = _todoList.where((todo) => todo.parentId == id).toList();
@@ -207,31 +172,10 @@ class TodoProvider extends ChangeNotifier {
   }
 
   List<Todo> getAllTodos() {
-    List<Todo> tdlist = _todoList;
+    List<Todo> tdlist = List.from(_todoList);
     for (var todo in tdlist) {
       todo.subtasks = _todoList.where((t) => t.parentId == todo.id).toList();
     }
-    tdlist.sort((a, b) {
-      if (a.priority != b.priority) {
-        return a.priority
-            .compareTo(b.priority); // Sắp xếp theo ưu tiên giảm dần
-      } else {
-        return a.addedDate!.compareTo(
-            b.addedDate!); // Nếu ưu tiên bằng nhau, sắp xếp theo addedDate
-      }
-    });
-    return tdlist;
-  }
-
-  List<Todo> getUpcomingTodos() {
-    // Lọc ra danh sách công việc có ngày hết hạn trong tương lai
-    List<Todo> tdlist = _todoList
-        .where((todo) => todo.dueDate!.isAfter(DateTime.now()))
-        .toList();
-    for (var todo in tdlist) {
-      todo.subtasks = _todoList.where((t) => t.parentId == todo.id).toList();
-    }
-
     // tdlist.sort((a, b) => a.dueDate!.compareTo(b.dueDate!));
     tdlist.sort((a, b) {
       if (a.priority != b.priority) {
@@ -242,7 +186,63 @@ class TodoProvider extends ChangeNotifier {
             b.addedDate!); // Nếu ưu tiên bằng nhau, sắp xếp theo addedDate
       }
     });
+    print(tdlist.length);
     return tdlist;
+  }
+
+  Map<DateTime, List<Todo>> getAllTodos2() {
+    print("notified");
+    Map<DateTime, List<Todo>> groupedTodos = {};
+
+    for (var todo in _todoList) {
+      if (todo.isCompleted == 1) continue;
+      DateTime date =
+          DateTime(todo.dueDate!.year, todo.dueDate!.month, todo.dueDate!.day);
+      if (!groupedTodos.containsKey(date)) {
+        groupedTodos[date] = [];
+      }
+      groupedTodos[date]!.add(todo);
+    }
+    var sortedByValueMap = Map.fromEntries(groupedTodos.entries.toList()
+      ..sort((e1, e2) => e1.key.compareTo(e2.key)));
+    return sortedByValueMap;
+  }
+
+  Map<DateTime, List<Todo>> getUpcomingTodos() {
+    // Lọc ra danh sách công việc có ngày hết hạn trong tương lai
+    Map<DateTime, List<Todo>> groupedTodos = {};
+    List<Todo> tdlist = List.from(_todoList);
+
+    tdlist
+        .where((todo) =>
+            (todo.dueDate!.isAfter(DateTime.now()) && todo.isCompleted == 0))
+        .toList();
+    for (var todo in tdlist) {
+      todo.subtasks = _todoList.where((t) => t.parentId == todo.id).toList();
+    }
+    tdlist.sort((a, b) {
+      if (a.priority != b.priority) {
+        return a.priority
+            .compareTo(b.priority); // Sắp xếp theo ưu tiên giảm dần
+      } else {
+        return a.addedDate!.compareTo(
+            b.addedDate!); // Nếu ưu tiên bằng nhau, sắp xếp theo addedDate
+      }
+    });
+    for (var todo in tdlist) {
+      DateTime date =
+          DateTime(todo.dueDate!.year, todo.dueDate!.month, todo.dueDate!.day);
+      if (!groupedTodos.containsKey(date)) {
+        groupedTodos[date] = [];
+      }
+      groupedTodos[date]!.add(todo);
+    }
+    var sortedByValueMap = Map.fromEntries(groupedTodos.entries.toList()
+      ..sort((e1, e2) => e1.key.compareTo(e2.key)));
+    return sortedByValueMap;
+    // tdlist.sort((a, b) => a.dueDate!.compareTo(b.dueDate!));
+
+    
   }
 
   void addTodo(Todo todo) {

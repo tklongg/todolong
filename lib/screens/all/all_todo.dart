@@ -46,12 +46,20 @@ class _AllTodoScreenState extends State<AllTodoScreen> {
     super.dispose();
   }
 
+  void update() {
+    setState() {
+      showTitle = showTitle;
+      print("refreshed");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<Todo> alltodos = context.watch<TodoProvider>().getAllTodos();
+    // List<Todo> alltodos = context.watch<TodoProvider>().getAllTodos();
 
-    Map<DateTime, List<Todo>> todosByDate = _groupByDate(alltodos);
-
+    Map<DateTime, List<Todo>> todosByDate =
+        context.watch<TodoProvider>().getAllTodos2();
+    // print(todosByDate);
     return CustomScrollView(
         controller: _controller,
         physics: const BouncingScrollPhysics(
@@ -60,6 +68,7 @@ class _AllTodoScreenState extends State<AllTodoScreen> {
           CupertinoSliverRefreshControl(
             onRefresh: () async {
               await Future<void>.delayed(const Duration(milliseconds: 500));
+              update();
               // Add your refresh logic here
             },
           ),
@@ -122,32 +131,12 @@ class _AllTodoScreenState extends State<AllTodoScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // if (!showTitle) ...{
-                  //   Container(
-                  //     margin: const EdgeInsets.fromLTRB(14.0, 9.0, 9.0, 9.0),
-                  //     child: const Column(
-                  //       crossAxisAlignment: CrossAxisAlignment.start,
-                  //       children: [
-                  //         SizedBox(height: 20),
-                  //         Text(
-                  //           'All',
-                  //           style: TextStyle(
-                  //             fontSize: 30,
-                  //             fontFamily: '.SF Pro Text',
-                  //             fontWeight: FontWeight.w800,
-                  //           ),
-                  //         ),
-                  //         SizedBox(height: 10),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // } ,
-
                   // const SizedBox(height: 20),
                   Container(
                     margin: const EdgeInsets.all(0),
                     child: ListView.builder(
                       shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: todosByDate.length,
                       itemBuilder: (BuildContext context, int index) {
                         DateTime date = todosByDate.keys.toList()[index];
