@@ -17,7 +17,7 @@ class ReminderWidget extends StatelessWidget {
             builder: (context) {
               return Wrap(children: [
                 Container(
-                  color: Colors.white ,
+                  color: Colors.white,
                   child: Column(children: [
                     CupertinoNavigationBar(
                       border: Border.all(color: Colors.transparent),
@@ -27,7 +27,7 @@ class ReminderWidget extends StatelessWidget {
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: const Text('Cancel',
+                        child: const Text('Cancel reminder',
                             style: TextStyle(color: Color(0xFFD1453A))),
                       ),
                       trailing: CupertinoButton(
@@ -72,7 +72,8 @@ class ReminderWidget extends StatelessWidget {
               color: Color(0xFF6D6D6D),
             ), // Icon của mục
             const SizedBox(width: 5),
-            Text("${reminder?.inMinutes.remainder(60) ?? 0}m",
+            Text(
+                "${reminder?.inHours.remainder(60) ?? 0}h ${reminder?.inMinutes.remainder(60) ?? 0}m",
                 style: const TextStyle(
                   color: Color(0xFF6D6D6D),
                   fontFamily: ".SF Pro Text",

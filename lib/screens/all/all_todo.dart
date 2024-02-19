@@ -61,7 +61,7 @@ class _AllTodoScreenState extends State<AllTodoScreen> {
         context.watch<TodoProvider>().getAllTodos2();
     // print(todosByDate);
     return CustomScrollView(
-        controller: _controller,
+        // controller: _controller,
         physics: const BouncingScrollPhysics(
             parent: AlwaysScrollableScrollPhysics()),
         slivers: <Widget>[

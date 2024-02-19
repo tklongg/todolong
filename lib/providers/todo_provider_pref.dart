@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todolong/models/todo.dart';
+import 'package:todolong/utils/notification/notification_service.dart';
 
 class TodoProvider extends ChangeNotifier {
   late SharedPreferences _prefs;
@@ -24,99 +25,190 @@ class TodoProvider extends ChangeNotifier {
       print(jsonTodos.map((json) => Todo.fromJson(jsonDecode(json))).toList());
     } else {
       // Khởi tạo mảng Todo ban đầu nếu không có dữ liệu trong SharedPreferences
-      _todoList = [
-        Todo(
-          id: 1,
-          title: 'Buy groceries',
-          description:
-              'Go to the supermarket and buy essential items lorem loremloremloremloremlorem.',
-          priority: 2,
-          dueDate: DateTime.now(),
-          parentId: null,
-          isCompleted: 0, // Không có parent
-        ),
-        Todo(
-          id: 2,
-          title: 'Buy vegetables',
-          description: 'Get fresh vegetables for the week.',
-          priority: 1,
-          dueDate: DateTime.now().add(const Duration(days: 1)),
-          isCompleted: 0, // Không có parent
-          parentId: 1, // parentId của công việc này là 1
-        ),
-        Todo(
-          id: 3,
-          title: 'Buy fruits',
-          description: 'Get a variety of fruits.',
-          priority: 1,
-          dueDate: DateTime.now().add(Duration(days: 1)),
-          isCompleted: 0, // Không có parent
-          parentId: 1, // parentId của công việc này cũng là 1
-        ),
-        Todo(
-          id: 4,
-          title: 'Complete project',
-          description: 'Finish the coding project by the deadline.',
-          priority: 3,
-          dueDate: DateTime.now(),
-          isCompleted: 0, // Không có parent
-          parentId: null, // Không có parent
-        ),
-        Todo(
-          id: 5,
-          title: 'Write code',
-          description: 'Implement the required features.',
-          priority: 2,
-          dueDate: DateTime.now().add(const Duration(days: 1)),
-          isCompleted: 0, // Không có parent
-          parentId: 4, // parentId của công việc này là 4
-        ),
-        Todo(
-          id: 6,
-          title: 'Test the application',
-          description: 'Perform thorough testing.',
-          priority: 2,
-          dueDate: DateTime.now().add(Duration(days: 1)),
-          isCompleted: 0, // Không có parent
-          parentId: 4, // parentId của công việc này cũng là 4
-        ),
-        Todo(
-          id: 7,
-          title: 'Test the application 2',
-          description: 'Perform thorough testing.',
-          priority: 2,
-          dueDate: DateTime.now().add(Duration(days: -1)),
-          isCompleted: 0, // Không có parent
-          parentId: 4, // parentId của công việc này cũng là 4
-        ),
-        Todo(
-          id: 8,
-          title: 'Test the application 2',
-          description: 'Perform thorough testing.',
-          priority: 2,
-          dueDate: DateTime.now().add(Duration(days: 7)),
-          isCompleted: 0, // Không có parent
-          parentId: null, // parentId của công việc này cũng là 4
-        ),
-        Todo(
-          id: 9,
-          title: 'Test the application 2',
-          description: 'Perform thorough testing.',
-          priority: 2,
-          dueDate: DateTime.now().add(Duration(days: 8)),
-          isCompleted: 0, // Không có parent
-          parentId: null, // parentId của công việc này cũng là 4
-        ),
-        Todo(
-          id: 10,
-          title: 'Test the application 2',
-          description: 'Perform thorough testing.',
-          priority: 2,
-          dueDate: DateTime.now().add(Duration(days: 9)),
-          isCompleted: 0, // Không có parent
-          parentId: null, // parentId của công việc này cũng là 4
-        ),
-      ];
+      DateTime now = DateTime.now();
+      DateTime? dueDate;
+      dueDate = DateTime(now.year, now.month, now.day);
+      await addTodo(Todo(
+        id: 1,
+        title: 'Buy groceries',
+        description:
+            'Go to the supermarket and buy essential items lorem loremloremloremloremlorem.',
+        priority: 2,
+        dueDate: dueDate,
+        parentId: null,
+        isCompleted: 0, // Không có parent
+      ));
+      await addTodo(Todo(
+        id: 2,
+        title: 'Buy vegetables',
+        description: 'Get fresh vegetables for the week.',
+        priority: 1,
+        dueDate: DateTime.now().add(const Duration(days: 1)),
+        isCompleted: 0, // Không có parent
+        parentId: 1, // parentId của công việc này là 1
+      ));
+      await addTodo(Todo(
+        id: 3,
+        title: 'Buy fruits',
+        description: 'Get a variety of fruits.',
+        priority: 1,
+        dueDate: dueDate,
+        isCompleted: 0, // Không có parent
+        parentId: 1, // parentId của công việc này cũng là 1
+      ));
+
+      await addTodo(Todo(
+        id: 4,
+        title: 'Complete project',
+        description: 'Finish the coding project by the deadline.',
+        priority: 3,
+        dueDate: dueDate,
+        isCompleted: 0, // Không có parent
+        parentId: null, // Không có parent
+      ));
+
+      await addTodo(Todo(
+        id: 5,
+        title: 'Write code',
+        description: 'Implement the required features.',
+        priority: 2,
+        dueDate: dueDate.add(const Duration(days: 1)),
+        isCompleted: 0, // Không có parent
+        parentId: 4, // parentId của công việc này là 4
+      ));
+
+      await addTodo(Todo(
+        id: 6,
+        title: 'Test the application',
+        description: 'Perform thorough testing.',
+        priority: 2,
+        dueDate: dueDate.add(Duration(days: 1)),
+        isCompleted: 0, // Không có parent
+        parentId: 4, // parentId của công việc này cũng là 4
+      ));
+
+      await addTodo(Todo(
+        id: 7,
+        title: 'Test the application 2',
+        description: 'Perform thorough testing.',
+        priority: 2,
+        dueDate: dueDate.add(Duration(days: -1)),
+        isCompleted: 0, // Không có parent
+        parentId: 4, // parentId của công việc này cũng là 4
+      ));
+
+      await addTodo(Todo(
+        id: 8,
+        title: 'Test the application 2',
+        description: 'Perform thorough testing.',
+        priority: 2,
+        dueDate: dueDate.add(Duration(days: 7)),
+        isCompleted: 0, // Không có parent
+        parentId: null, // parentId của công việc này cũng là 4
+      ));
+
+      await addTodo(Todo(
+        id: 9,
+        title: 'Test the application 2',
+        description: 'Perform thorough testing.',
+        priority: 2,
+        dueDate: dueDate.add(Duration(days: 8)),
+        isCompleted: 0, // Không có parent
+        parentId: null, // parentId của công việc này cũng là 4
+      ));
+
+      await addTodo(Todo(
+        id: 10,
+        title: 'Test the application 2',
+        description: 'Perform thorough testing.',
+        priority: 2,
+        dueDate: dueDate.add(Duration(days: 9)),
+        isCompleted: 0, // Không có parent
+        parentId: null, // parentId của công việc này cũng là 4
+      ));
+      // _todoList = [
+      //   Todo(
+      //     id: 2,
+      //     title: 'Buy vegetables',
+      //     description: 'Get fresh vegetables for the week.',
+      //     priority: 1,
+      //     dueDate: DateTime.now().add(const Duration(days: 1)),
+      //     isCompleted: 0, // Không có parent
+      //     parentId: 1, // parentId của công việc này là 1
+      //   ),
+      //   Todo(
+      //     id: 3,
+      //     title: 'Buy fruits',
+      //     description: 'Get a variety of fruits.',
+      //     priority: 1,
+      //     dueDate: dueDate,
+      //     isCompleted: 0, // Không có parent
+      //     parentId: 1, // parentId của công việc này cũng là 1
+      //   ),
+      //   Todo(
+      //     id: 4,
+      //     title: 'Complete project',
+      //     description: 'Finish the coding project by the deadline.',
+      //     priority: 3,
+      //     dueDate: dueDate,
+      //     isCompleted: 0, // Không có parent
+      //     parentId: null, // Không có parent
+      //   ),
+      //   Todo(
+      //     id: 5,
+      //     title: 'Write code',
+      //     description: 'Implement the required features.',
+      //     priority: 2,
+      //     dueDate: dueDate.add(const Duration(days: 1)),
+      //     isCompleted: 0, // Không có parent
+      //     parentId: 4, // parentId của công việc này là 4
+      //   ),
+      //   Todo(
+      //     id: 6,
+      //     title: 'Test the application',
+      //     description: 'Perform thorough testing.',
+      //     priority: 2,
+      //     dueDate: dueDate.add(Duration(days: 1)),
+      //     isCompleted: 0, // Không có parent
+      //     parentId: 4, // parentId của công việc này cũng là 4
+      //   ),
+      //   Todo(
+      //     id: 7,
+      //     title: 'Test the application 2',
+      //     description: 'Perform thorough testing.',
+      //     priority: 2,
+      //     dueDate: dueDate.add(Duration(days: -1)),
+      //     isCompleted: 0, // Không có parent
+      //     parentId: 4, // parentId của công việc này cũng là 4
+      //   ),
+      //   Todo(
+      //     id: 8,
+      //     title: 'Test the application 2',
+      //     description: 'Perform thorough testing.',
+      //     priority: 2,
+      //     dueDate: dueDate.add(Duration(days: 7)),
+      //     isCompleted: 0, // Không có parent
+      //     parentId: null, // parentId của công việc này cũng là 4
+      //   ),
+      //   Todo(
+      //     id: 9,
+      //     title: 'Test the application 2',
+      //     description: 'Perform thorough testing.',
+      //     priority: 2,
+      //     dueDate: dueDate.add(Duration(days: 8)),
+      //     isCompleted: 0, // Không có parent
+      //     parentId: null, // parentId của công việc này cũng là 4
+      //   ),
+      //   Todo(
+      //     id: 10,
+      //     title: 'Test the application 2',
+      //     description: 'Perform thorough testing.',
+      //     priority: 2,
+      //     dueDate: dueDate.add(Duration(days: 9)),
+      //     isCompleted: 0, // Không có parent
+      //     parentId: null, // parentId của công việc này cũng là 4
+      //   ),
+      // ];
 
       // Lưu mảng Todo ban đầu vào SharedPreferences
       _saveTodos();
@@ -132,7 +224,7 @@ class TodoProvider extends ChangeNotifier {
     await _prefs.setStringList(_todoKey, encoded);
   }
 
-  void addTodo(Todo todo) {
+  Future<void> addTodo(Todo todo) async {
     int maxId = _todoList.isNotEmpty
         ? _todoList.map((e) => e.id!).reduce((a, b) => a > b ? a : b)
         : 0;
@@ -140,31 +232,37 @@ class TodoProvider extends ChangeNotifier {
     todo.id = maxId + 1;
     todo.addedDate = DateTime.now();
 
+    if (todo.reminder != null) {
+      await NotificationService().addScheduledNotification(todo);
+    }
     _todoList.add(todo);
     _saveTodos();
     notifyListeners();
   }
 
-  void updateTodo(int id, Todo updatedTodo) {
+  Future<void> updateTodo(int id, Todo updatedTodo) async {
     int index = _todoList.indexWhere((todo) => todo.id == id);
     if (index != -1) {
       _todoList[index] = updatedTodo;
+      NotificationService().adjustScheduleNotification(updatedTodo);
       _saveTodos();
       notifyListeners();
     }
   }
 
-  void completeTodo(int id) {
+  Future<void> completeTodo(int id) async {
     int index = _todoList.indexWhere((todo) => todo.id == id);
     if (index != -1) {
       _todoList[index].isCompleted = 1;
+      NotificationService().removeScheduledNotifications(id);
       _saveTodos();
       notifyListeners();
     }
   }
 
-  void deleteTodo(int id) {
+  Future<void> deleteTodo(int id) async {
     _todoList.removeWhere((todo) => todo.id == id);
+    NotificationService().removeScheduledNotifications(id);
     _saveTodos();
     notifyListeners();
   }

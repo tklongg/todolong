@@ -17,7 +17,8 @@ class _AddTodoState extends State<AddTodo> {
   late FocusNode _titleFocusNode;
   String title = '';
   String description = '';
-  DateTime? dueDate = DateTime.now();
+  DateTime now = DateTime.now();
+  DateTime? dueDate;
   Duration? reminder;
 
   int test = 0;
@@ -47,6 +48,7 @@ class _AddTodoState extends State<AddTodo> {
   @override
   void initState() {
     super.initState();
+    dueDate = DateTime(now.year, now.month, now.day);
     _titleFocusNode = FocusNode(); // Khởi tạo FocusNode
     _titleFocusNode.requestFocus(); // Tự động focus vào ô title
   }

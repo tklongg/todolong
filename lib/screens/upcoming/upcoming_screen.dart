@@ -48,6 +48,8 @@ class _UpcomingScreensState extends State<UpcomingScreen> {
 
   void updateUpcomingTodos() {
     setState(() {
+      showTitle = showTitle;
+
       print("refreshed");
     });
   }
@@ -56,10 +58,11 @@ class _UpcomingScreensState extends State<UpcomingScreen> {
   Widget build(BuildContext context) {
     // List<Todo> upcomingTodos = context.watch<TodoProvider>().getUpcomingTodos();
 
-    Map<DateTime, List<Todo>> todosByDate = context.watch<TodoProvider>().getUpcomingTodos();
+    Map<DateTime, List<Todo>> todosByDate =
+        context.watch<TodoProvider>().getUpcomingTodos();
 
     return CustomScrollView(
-        controller: _controller,
+        // controller: _controller,
         physics: const BouncingScrollPhysics(
             parent: AlwaysScrollableScrollPhysics()),
         slivers: <Widget>[

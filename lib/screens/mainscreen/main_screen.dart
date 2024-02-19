@@ -49,11 +49,7 @@ class _MainScreenState extends State<MainScreen> {
               curve: Curves.linearToEaseOut,
             );
           }
-          // onTap: (index) {
-          //   setState(() {
-          //     _currentIndex = index;
-          //   });
-          // }
+         
           ,
           items: [
             BottomNavigationBarItem(
@@ -76,7 +72,7 @@ class _MainScreenState extends State<MainScreen> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            NotificationService().showNotification(title: "ok", body: "ok");
+            // NotificationService().showNotification(title: "ok", body: "ok");
             showAddTodo();
           },
           shape: const CircleBorder(
@@ -130,44 +126,4 @@ class _MainScreenState extends State<MainScreen> {
   }
 }
 
-class InboxScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Inbox'),
-      ),
-      body: Center(
-        child: Text('Inbox Screen'),
-      ),
-    );
-  }
-}
 
-class SearchScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Search'),
-      ),
-      body: Center(
-        child: Text('Search Screen'),
-      ),
-    );
-  }
-}
-
-class BrowseScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Browse'),
-      ),
-      body: Center(
-        child: Text('Browse Screen'),
-      ),
-    );
-  }
-}
