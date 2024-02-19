@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class ReminderWidget extends StatelessWidget {
   final Duration? reminder;
-  final ValueChanged<Duration>? setReminder;
+  final ValueChanged<Duration?>? setReminder;
 
   const ReminderWidget({super.key, this.reminder, this.setReminder});
   @override
@@ -25,7 +25,39 @@ class ReminderWidget extends StatelessWidget {
                       leading: CupertinoButton(
                         padding: const EdgeInsets.all(0),
                         onPressed: () {
-                          Navigator.pop(context);
+                          // Navigator.of(context).pop();
+                          showCupertinoDialog(
+                              // barrierDismissible: true,
+                              // barrierLabel: "ok",
+
+                              context: context,
+                              builder: (context) => CupertinoAlertDialog(
+                                    title: const Text("Remove reminder?",
+                                        style: TextStyle(
+                                            color: Color(0xFFD1453A))),
+                                    content: const Text(
+                                        "You want this todo to not remind you?"),
+                                    actions: <Widget>[
+                                      CupertinoDialogAction(
+                                        child: const Text("Cancel",
+                                            style: TextStyle(
+                                                color: Color(0xFFD1453A))),
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(false),
+                                      ),
+                                      CupertinoDialogAction(
+                                          child: const Text("Ok",
+                                              style: TextStyle(
+                                                  color: Color.fromARGB(
+                                                      255, 46, 133, 231))),
+                                          onPressed: () {
+                                            setReminder!(null);
+                                            Navigator.of(context).pop(true);
+                                            Navigator.of(context).pop();
+                                          }),
+                                    ],
+                                  ));
+                          // Navigator.pop(context);
                         },
                         child: const Text('Cancel reminder',
                             style: TextStyle(color: Color(0xFFD1453A))),

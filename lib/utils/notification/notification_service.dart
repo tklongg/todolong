@@ -120,21 +120,24 @@ class NotificationService {
 
   Future<void> addScheduledNotification(Todo todo) async {
     final dueDate = todo.dueDate!;
-    final reminderTime = dueDate.add(todo.reminder!);
-    // Trừ 10 phút từ thời gian reminder
-    final scheduledTime = reminderTime.subtract(const Duration(minutes: 10));
-    log(scheduledTime.toString());
-    log(tz.TZDateTime.parse(tz.local, scheduledTime.toString()).toString());
+    if (todo.reminder != null) {
+      final reminderTime = dueDate.add(todo.reminder!);
+      // Trừ 10 phút từ thời gian reminder
+      final scheduledTime = reminderTime.subtract(const Duration(minutes: 10));
+      log(scheduledTime.toString());
+      log(tz.TZDateTime.parse(tz.local, scheduledTime.toString()).toString());
 
-    await flutterLocalNotificationsPlugin.zonedSchedule(
-      todo.id!,
-      todo.title,
-      todo.description,
-      tz.TZDateTime.parse(tz.local, scheduledTime.toString()),
-      await notificationDetails(),
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-    );
+      await flutterLocalNotificationsPlugin.zonedSchedule(
+        todo.id!,
+        todo.title,
+        todo.description,
+        tz.TZDateTime.parse(tz.local, scheduledTime.toString()),
+        await notificationDetails(),
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+      );
+    }
+
     // notiList.add(NotiTodo(todo.id!, todo.id!));
     // _saveNotis();
   }
@@ -146,19 +149,21 @@ class NotificationService {
   Future<void> adjustScheduleNotification(Todo todo) async {
     await flutterLocalNotificationsPlugin.cancel(todo.id!);
     final dueDate = todo.dueDate!;
-    final reminderTime = dueDate.add(todo.reminder!);
-    // Trừ 10 phút từ thời gian reminder
-    final scheduledTime = reminderTime.subtract(const Duration(minutes: 10));
+    if (todo.reminder != null) {
+      final reminderTime = dueDate.add(todo.reminder!);
+      // Trừ 10 phút từ thời gian reminder
+      final scheduledTime = reminderTime.subtract(const Duration(minutes: 10));
 
-    await flutterLocalNotificationsPlugin.zonedSchedule(
-      todo.id!, // ID của thông báo, có thể là ID của Todo
-      todo.title, // Tiêu đề của thông báo
-      todo.description, // Mô tả của thông báo
-      tz.TZDateTime.parse(tz.local, scheduledTime.toString()),
-      await notificationDetails(),
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-    );
+      await flutterLocalNotificationsPlugin.zonedSchedule(
+        todo.id!, // ID của thông báo, có thể là ID của Todo
+        todo.title, // Tiêu đề của thông báo
+        todo.description, // Mô tả của thông báo
+        tz.TZDateTime.parse(tz.local, scheduledTime.toString()),
+        await notificationDetails(),
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+      );
+    }
   }
 
   // Future<void> _saveNotis() async {

@@ -31,7 +31,7 @@ class _AddTodoState extends State<AddTodo> {
     });
   }
 
-  void setReminder(Duration time) {
+  void setReminder(Duration? time) {
     setState(() {
       reminder = time;
     });

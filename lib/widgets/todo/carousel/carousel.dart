@@ -39,7 +39,7 @@ class Carousel extends StatelessWidget {
   Duration? reminder;
   final ValueChanged<DateTime>? setDueDate;
   final ValueChanged<int>? setPriority;
-  final ValueChanged<Duration>? setReminder;
+  final ValueChanged<Duration?>? setReminder;
 
   Carousel({
     super.key,
