@@ -14,9 +14,11 @@ class SearchPreferences {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String> searchPref = prefs.getStringList(_key) ?? [];
     if (searchPref.length >= 5) {
-      searchPref.removeAt(0);
-      searchPref.add(searchStr);
-      log("searchPref: $searchPref");
+      searchPref.removeWhere((element) => element == searchStr);
+      searchPref.insert(0, searchStr);
+      if (searchPref.length > 5) {
+        searchPref.removeLast();
+      }
     } else {
       log("searchPref: $searchPref");
       searchPref.add(searchStr);

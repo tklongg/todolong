@@ -107,6 +107,23 @@ class _SearchScreenState extends State<SearchScreen> {
                           icon: const Icon(Icons.clear),
                         ),
                       ),
+                      onSubmitted: (value) async {
+                        if (value.isNotEmpty) {
+                          await SearchPreferences().addSearchPref(value);
+                          setState(
+                            () {
+                              searched = true;
+                            },
+                          );
+                          handleSearch(value);
+                        } else {
+                          setState(
+                            () {
+                              searched = false;
+                            },
+                          );
+                        }
+                      },
                       // onFieldSubmitted: (value) async {
                       //   if (value != "") {
                       //     handleSearch(value);
@@ -178,7 +195,18 @@ class _SearchScreenState extends State<SearchScreen> {
                             physics: const NeverScrollableScrollPhysics(),
                             itemCount: data.length,
                             itemBuilder: (BuildContext context, int index) {
-                              return RecentSearchBtn(data: data[index]);
+                              return RecentSearchBtn(
+                                data: data[index],
+                                onTap: () async {
+                                  _controller.text = data[index];
+                                  handleSearch(data[index]);
+                                  await SearchPreferences()
+                                      .addSearchPref(data[index]);
+                                  setState(() {
+                                    searched = true;
+                                  });
+                                },
+                              );
                             },
                           );
                         }
