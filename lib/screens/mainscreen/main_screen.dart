@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:todolong/screens/all/all_todo.dart';
+import 'package:todolong/screens/search/search_screen.dart';
 import 'package:todolong/screens/today/today_screen.dart';
 import 'package:todolong/screens/upcoming/upcoming_screen.dart';
-import 'package:todolong/utils/notification/notification_service.dart';
 import 'package:todolong/widgets/todo/add_todo/add_todo.dart';
 
 class MainScreen extends StatefulWidget {
@@ -20,7 +20,7 @@ class _MainScreenState extends State<MainScreen> {
     const TodayScreen(),
     const UpcomingScreen(),
     const AllTodoScreen(),
-    // BrowseScreen(),
+    const SearchScreen(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -48,9 +48,7 @@ class _MainScreenState extends State<MainScreen> {
               duration: const Duration(milliseconds: 150),
               curve: Curves.linearToEaseOut,
             );
-          }
-         
-          ,
+          },
           items: [
             BottomNavigationBarItem(
               icon: buildTodayIcon(),
@@ -64,10 +62,10 @@ class _MainScreenState extends State<MainScreen> {
               icon: Icon(Icons.all_inbox),
               label: 'All',
             ),
-            // const BottomNavigationBarItem(
-            //   icon: Icon(Icons.list_alt_rounded),
-            //   label: 'Browse',
-            // ),
+            const BottomNavigationBarItem(
+              icon: Icon(Icons.search),
+              label: 'Search',
+            ),
           ],
         ),
         floatingActionButton: FloatingActionButton(
