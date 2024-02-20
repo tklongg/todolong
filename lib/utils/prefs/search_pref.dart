@@ -13,7 +13,7 @@ class SearchPreferences {
   Future<void> addSearchPref(String searchStr) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String> searchPref = prefs.getStringList(_key) ?? [];
-    if (searchPref.length >= 3) {
+    if (searchPref.length >= 5) {
       searchPref.removeAt(0);
       searchPref.add(searchStr);
       log("searchPref: $searchPref");

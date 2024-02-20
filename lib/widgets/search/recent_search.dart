@@ -17,18 +17,25 @@ class RecentSearchBtn extends StatelessWidget {
             width: 20,
           ),
           const Icon(
-            CupertinoIcons.clock,
+            CupertinoIcons.arrow_counterclockwise,
             size: 24,
+            color: Color(0xffd2d2d2),
           ),
           const SizedBox(
             width: 20,
           ),
           Expanded(
             child: Container(
+              alignment: Alignment.centerLeft,
+              height: MediaQuery.of(context).size.height * 0.06,  
               decoration: const BoxDecoration(
-                border: Border(bottom: BorderSide(color: Color(0xffd2d2d2))),
+                border: Border(bottom: BorderSide(color: Color(0xffd2d2d2),width: 0.3)),
               ),
-              child: Text(data, style: const TextStyle(color: Colors.black)),
+              child: Text(data,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontFamily: '.SF Pro Text')),
             ),
           )
         ]),

@@ -11,7 +11,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 
 class TodoItemWidget extends StatelessWidget {
   final Todo todo;
-  // final int? id;
+  final int? type;
   final bool? isModalOpen;
   final VoidCallback? onOpenModal;
   final VoidCallback? onCloseModal;
@@ -19,7 +19,7 @@ class TodoItemWidget extends StatelessWidget {
   const TodoItemWidget({
     Key? key,
     required this.todo,
-    // this.id,
+    this.type,
     this.isModalOpen,
     this.onOpenModal,
     this.onCloseModal,
@@ -43,13 +43,6 @@ class TodoItemWidget extends StatelessWidget {
               icon: Icons.delete,
               label: 'Delete',
             ),
-            // SlidableAction(
-            //   onPressed: doNothing,
-            //   backgroundColor: Color(0xFF0392CF),
-            //   foregroundColor: Colors.white,
-            //   icon: Icons.save,
-            //   label: 'Save',
-            // ),
           ],
         ),
         child: ListTile(
@@ -58,14 +51,7 @@ class TodoItemWidget extends StatelessWidget {
           leading: CupertinoButton(
             padding: const EdgeInsets.all(0),
             onPressed: () {},
-            child: TodoPriorityCircle(
-              prior: todo.priority,
-              handleClick: () {
-                Provider.of<TodoProvider>(context, listen: false)
-                    .completeTodo(todo.id!);
-                print(todo.id!);
-              },
-            ),
+            child: buildTitle(context),
           ),
           title: Text(
             todo.title,
@@ -98,5 +84,25 @@ class TodoItemWidget extends StatelessWidget {
             );
           },
         ));
+  }
+  Widget buildTitle(context){
+    if (type == 2){
+      return const Icon(
+          Icons.format_list_bulleted,
+          size: 24,
+          color: Colors.black38,
+        );
+        // const SizedBox(width: 20);
+    }
+    else {
+      return TodoPriorityCircle(
+              prior: todo.priority,
+              handleClick: () {
+                Provider.of<TodoProvider>(context, listen: false)
+                    .completeTodo(todo.id!);
+                print(todo.id!);
+              },
+            );
+    };
   }
 }
