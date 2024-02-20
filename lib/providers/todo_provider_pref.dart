@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todolong/models/todo.dart';
 import 'package:todolong/utils/notification/notification_service.dart';
+import 'package:todolong/utils/strings/compare.dart';
 
 class TodoProvider extends ChangeNotifier {
   late SharedPreferences _prefs;
@@ -126,91 +127,7 @@ class TodoProvider extends ChangeNotifier {
         isCompleted: 0, // Không có parent
         parentId: null, // parentId của công việc này cũng là 4
       ));
-      // _todoList = [
-      //   Todo(
-      //     id: 2,
-      //     title: 'Buy vegetables',
-      //     description: 'Get fresh vegetables for the week.',
-      //     priority: 1,
-      //     dueDate: DateTime.now().add(const Duration(days: 1)),
-      //     isCompleted: 0, // Không có parent
-      //     parentId: 1, // parentId của công việc này là 1
-      //   ),
-      //   Todo(
-      //     id: 3,
-      //     title: 'Buy fruits',
-      //     description: 'Get a variety of fruits.',
-      //     priority: 1,
-      //     dueDate: dueDate,
-      //     isCompleted: 0, // Không có parent
-      //     parentId: 1, // parentId của công việc này cũng là 1
-      //   ),
-      //   Todo(
-      //     id: 4,
-      //     title: 'Complete project',
-      //     description: 'Finish the coding project by the deadline.',
-      //     priority: 3,
-      //     dueDate: dueDate,
-      //     isCompleted: 0, // Không có parent
-      //     parentId: null, // Không có parent
-      //   ),
-      //   Todo(
-      //     id: 5,
-      //     title: 'Write code',
-      //     description: 'Implement the required features.',
-      //     priority: 2,
-      //     dueDate: dueDate.add(const Duration(days: 1)),
-      //     isCompleted: 0, // Không có parent
-      //     parentId: 4, // parentId của công việc này là 4
-      //   ),
-      //   Todo(
-      //     id: 6,
-      //     title: 'Test the application',
-      //     description: 'Perform thorough testing.',
-      //     priority: 2,
-      //     dueDate: dueDate.add(Duration(days: 1)),
-      //     isCompleted: 0, // Không có parent
-      //     parentId: 4, // parentId của công việc này cũng là 4
-      //   ),
-      //   Todo(
-      //     id: 7,
-      //     title: 'Test the application 2',
-      //     description: 'Perform thorough testing.',
-      //     priority: 2,
-      //     dueDate: dueDate.add(Duration(days: -1)),
-      //     isCompleted: 0, // Không có parent
-      //     parentId: 4, // parentId của công việc này cũng là 4
-      //   ),
-      //   Todo(
-      //     id: 8,
-      //     title: 'Test the application 2',
-      //     description: 'Perform thorough testing.',
-      //     priority: 2,
-      //     dueDate: dueDate.add(Duration(days: 7)),
-      //     isCompleted: 0, // Không có parent
-      //     parentId: null, // parentId của công việc này cũng là 4
-      //   ),
-      //   Todo(
-      //     id: 9,
-      //     title: 'Test the application 2',
-      //     description: 'Perform thorough testing.',
-      //     priority: 2,
-      //     dueDate: dueDate.add(Duration(days: 8)),
-      //     isCompleted: 0, // Không có parent
-      //     parentId: null, // parentId của công việc này cũng là 4
-      //   ),
-      //   Todo(
-      //     id: 10,
-      //     title: 'Test the application 2',
-      //     description: 'Perform thorough testing.',
-      //     priority: 2,
-      //     dueDate: dueDate.add(Duration(days: 9)),
-      //     isCompleted: 0, // Không có parent
-      //     parentId: null, // parentId của công việc này cũng là 4
-      //   ),
-      // ];
 
-      // Lưu mảng Todo ban đầu vào SharedPreferences
       _saveTodos();
       notifyListeners();
     }
@@ -413,5 +330,38 @@ class TodoProvider extends ChangeNotifier {
       ..sort((e1, e2) => e1.key.compareTo(e2.key)));
     return sortedByValueMap;
     // tdlist.sort((a, b) => a.dueDate!.compareTo(b.dueDate!));
+  }
+
+  (List<Todo>, List<Todo>) searchTodoByTitle(String searchStr) {
+    List<Todo> td = List.from(_todoList);
+    td = td.where((e) => e.isCompleted == 0).toList();
+    for (var todo in td) {
+      todo.subtasks = _todoList.where((t) => t.parentId == todo.id).toList();
+    }
+    List<Todo> titleMatch = [];
+    List<Todo> descMatch = [];
+    for (var todo in td) {
+      if (todo.title.contains(searchStr)) {
+        titleMatch.add(todo);
+      }
+      if (todo.description != null) {
+        if (todo.description!.contains(searchStr)) {
+          descMatch.add(todo);
+        }
+      }
+      // double t1 = CompareString.calculateSimilarity(todo.title, searchStr);
+      // var d1 = todo.description != null
+      //     ? CompareString.calculateSimilarity(todo.description!, searchStr)
+      //     : null;
+      // if (t1 > 0.3) {
+      //   titleMatch.add(todo);
+      // }
+      // if (d1 != null) {
+      //   if (d1 > 0.3) {
+      //     descMatch.add(todo);
+      //   }
+      // }
+    }
+    return (titleMatch, descMatch);
   }
 }

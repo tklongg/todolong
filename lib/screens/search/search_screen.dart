@@ -2,8 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todolong/models/todo.dart';
 import 'package:todolong/providers/todo_provider_pref.dart';
+import 'package:todolong/utils/prefs/search_pref.dart';
+import 'package:todolong/widgets/search/recent_search.dart';
 import 'package:todolong/widgets/todo/todo_item/todo_item.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -14,19 +17,37 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  bool showTitle = false;
+  // String searchString = '';
+
+  List<Todo> titleMatch = [];
+  List<Todo> descMatch = [];
+  void handleSearch(String searchString) {
+    List<Todo> t1;
+    List<Todo> t2;
+    (t1, t2) = Provider.of<TodoProvider>(context, listen: false)
+        .searchTodoByTitle(searchString);
+    print(t1);
+    print(t2);
+    setState(() {
+      titleMatch = t1;
+      descMatch = t2;
+    });
+  }
+
   void update() {
-    setState() {
-      showTitle = showTitle;
+    setState(() {
       print("refreshed");
-    }
+    });
+  }
+
+  Future<List<String>> fetchData() async {
+    // Simulated delay of 2 seconds
+    return await SearchPreferences().getSearchPref();
   }
 
   @override
   Widget build(BuildContext context) {
     // List<Todo> alltodos = context.watch<TodoProvider>().getAllTodos();
-
-    Map<DateTime, List<Todo>> todosByDate = new Map();
     // print(todosByDate);
     return CustomScrollView(
         // controller: _controller,
@@ -41,7 +62,7 @@ class _SearchScreenState extends State<SearchScreen> {
             },
           ),
           SliverAppBar(
-            toolbarHeight: MediaQuery.of(context).size.height * 0.2,
+            toolbarHeight: MediaQuery.of(context).size.height * 0.25,
             title: Container(
               margin: const EdgeInsets.fromLTRB(0, 1, 9.0, 9.0),
               child: Column(
@@ -59,119 +80,157 @@ class _SearchScreenState extends State<SearchScreen> {
                   const SizedBox(height: 20),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: TextField(
-                      cursorColor: Color(0xFFD74638),
-                      decoration: InputDecoration(
-                        hintText: 'Enter your search query...',
-                        hintStyle: TextStyle(
-                            color: Colors.grey[800]), // Màu chữ xám đậm
-                        prefixIcon: Icon(Icons.search,
-                            color: Colors.grey[800]), // Màu icon xám đậm
-                        fillColor: Colors.grey[200], // Background xám
-                        filled: true,
-                        border: const OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                    child: TextFormField(
+                        cursorColor: const Color(0xFFD74638),
+                        decoration: const InputDecoration(
+                          hintText: 'Title, Description and More',
+                          hintStyle: TextStyle(color: Color(0xFF807F81)),
+                          prefixIcon:
+                              Icon(Icons.search, color: Color(0xFF807F81)),
+                          fillColor: Color(0xFFEEEEF0),
+                          filled: true,
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                          ),
                         ),
-                      ),
-                    ),
+                        onFieldSubmitted: (value) async {
+                          if (value != "") {
+                            handleSearch(value);
+                            await SearchPreferences().addSearchPref(value);
+                          }
+                        }),
                   ),
                   // SizedBox(height: 20),
                 ],
               ),
             ),
-
             expandedHeight: MediaQuery.of(context).size.height * 0.05,
-            // Không bật động tác tự động co/expand
-
             backgroundColor: Colors.white,
-
             flexibleSpace: const FlexibleSpaceBar(
               centerTitle: true,
             ),
           ),
           SliverToBoxAdapter(
             child: Stack(children: [
+              const SizedBox(height: 120),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // const SizedBox(height: 20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(9.0, 0, 9.0, 0.0),
+                        child: const Text(
+                          "Recently Search",
+                          style: TextStyle(
+                              fontSize: 15,
+                              fontFamily: '.SF Pro Text',
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      const Divider(
+                        color: Color(0XFFD0d0d0),
+                      ),
+                    ],
+                  ),
+                  FutureBuilder(
+                    future: fetchData(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return const Center(
+                          child: Text("error fetching recently search"),
+                        );
+                      } else {
+                        List<String> data = snapshot.data!;
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: data.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return RecentSearchBtn(data: data[index]);
+                          },
+                        );
+                      }
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(9.0, 0, 9.0, 0.0),
+                        child: const Text(
+                          "Tasks",
+                          style: TextStyle(
+                              fontSize: 15,
+                              fontFamily: '.SF Pro Text',
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      const Divider(
+                        color: Color(0XFFD0d0d0),
+                      ),
+                    ],
+                  ),
                   Container(
                     margin: const EdgeInsets.all(0),
                     child: ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: todosByDate.length,
+                      itemCount: titleMatch.length,
                       itemBuilder: (BuildContext context, int index) {
-                        DateTime date = todosByDate.keys.toList()[index];
-                        List<Todo> todayTodos = todosByDate[date]!;
-
-                        return _buildDaySection(context, date, todayTodos);
+                        return TodoItemWidget(
+                          todo: titleMatch[index],
+                        );
                       },
                     ),
-                  )
+                  ),
+                  const SizedBox(height: 20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(9.0, 0, 9.0, 0.0),
+                        child: const Text(
+                          "Descriptions",
+                          style: TextStyle(
+                              fontSize: 15,
+                              fontFamily: '.SF Pro Text',
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      const Divider(
+                        color: Color(0XFFD0d0d0),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    margin: const EdgeInsets.all(0),
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: descMatch.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return TodoItemWidget(
+                          todo: descMatch[index],
+                        );
+                      },
+                    ),
+                  ),
                 ],
               ),
             ]),
           )
         ]);
   }
-
-  Widget _buildDaySection(
-      BuildContext context, DateTime date, List<Todo> todos) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: const EdgeInsets.fromLTRB(14.0, 0, 9.0, 0.0),
-              child: Text(
-                DateFormat('dd MMM - EEEE').format(date),
-                style: const TextStyle(
-                    fontSize: 13.7,
-                    fontFamily: '.SF Pro Text',
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-            const Divider(
-              color: Color(0XFFD0d0d0),
-            ),
-          ],
-        ),
-        Container(
-          margin: const EdgeInsets.all(0),
-          child: ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: todos.length,
-            itemBuilder: (BuildContext context, int index) {
-              return TodoItemWidget(
-                todo: todos[index],
-              );
-            },
-          ),
-        ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.05,
-        )
-      ],
-    );
-  }
-
-  Map<DateTime, List<Todo>> _groupByDate(List<Todo> todos) {
-    Map<DateTime, List<Todo>> groupedTodos = {};
-
-    for (var todo in todos) {
-      DateTime date =
-          DateTime(todo.dueDate!.year, todo.dueDate!.month, todo.dueDate!.day);
-      if (!groupedTodos.containsKey(date)) {
-        groupedTodos[date] = [];
-      }
-      groupedTodos[date]!.add(todo);
-    }
-
-    return groupedTodos;
-  }
+  
 }
+
+
