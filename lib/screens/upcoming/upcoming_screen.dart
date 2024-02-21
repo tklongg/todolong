@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:todolong/models/todo.dart';
 import 'package:todolong/providers/todo_provider_pref.dart';
 import 'package:todolong/widgets/todo/todo_item/todo_item.dart';
-import 'dart:math';
+
 
 class UpcomingScreen extends StatefulWidget {
   const UpcomingScreen({super.key});
@@ -129,28 +129,6 @@ class _UpcomingScreensState extends State<UpcomingScreen> {
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // if (!showTitle) ...{
-                //   Container(
-                //     margin: const EdgeInsets.fromLTRB(14.0, 9.0, 9.0, 9.0),
-                //     child: const Column(
-                //       crossAxisAlignment: CrossAxisAlignment.start,
-                //       children: [
-                //         SizedBox(height: 20),
-                //         Text(
-                //           'Upcoming',
-                //           style: TextStyle(
-                //             fontSize: 30,
-                //             fontFamily: '.SF Pro Text',
-                //             fontWeight: FontWeight.w800,
-                //           ),
-                //         ),
-                //         SizedBox(height: 10),
-                //       ],
-                //     ),
-                //   ),
-                // },
-
-                // const SizedBox(height: 20),
                 Container(
                   margin: const EdgeInsets.all(0),
                   child: ListView.builder(
@@ -212,20 +190,5 @@ class _UpcomingScreensState extends State<UpcomingScreen> {
         )
       ],
     );
-  }
-
-  Map<DateTime, List<Todo>> _groupByDate(List<Todo> todos) {
-    Map<DateTime, List<Todo>> groupedTodos = {};
-
-    for (var todo in todos) {
-      DateTime date =
-          DateTime(todo.dueDate!.year, todo.dueDate!.month, todo.dueDate!.day);
-      if (!groupedTodos.containsKey(date)) {
-        groupedTodos[date] = [];
-      }
-      groupedTodos[date]!.add(todo);
-    }
-
-    return groupedTodos;
   }
 }

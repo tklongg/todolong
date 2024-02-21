@@ -103,6 +103,6 @@ class TodoItemWidget extends StatelessWidget {
                 print(todo.id!);
               },
             );
-    };
+    }
   }
 }

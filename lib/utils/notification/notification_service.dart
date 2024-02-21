@@ -165,10 +165,4 @@ class NotificationService {
       );
     }
   }
-
-  // Future<void> _saveNotis() async {
-  //   List<String> encoded =
-  //       notiList.map((notis) => jsonEncode(notis.toJson())).toList();
-  //   await _prefs.setStringList(notiKey, encoded);
-  // }
 }
