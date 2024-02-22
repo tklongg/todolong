@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todolong/models/todo.dart';
 import 'package:todolong/utils/notification/notification_service.dart';
-import 'package:todolong/utils/strings/compare.dart';
 
 class TodoProvider extends ChangeNotifier {
   late SharedPreferences _prefs;

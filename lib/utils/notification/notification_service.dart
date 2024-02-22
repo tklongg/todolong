@@ -1,35 +1,14 @@
-import 'dart:convert';
+
 import 'dart:developer';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:todolong/models/todo.dart';
 
-class NotiTodo {
-  int todoId;
-  int notiId;
-  NotiTodo(
-    this.todoId,
-    this.notiId,
-  );
-  factory NotiTodo.fromJson(Map<String, dynamic> json) {
-    return NotiTodo(
-      json['todoId'] as int,
-      json['notiId'] as int,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'todoId': todoId,
-      'notiId': notiId,
-    };
-  }
-}
 
 class NotificationService {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
