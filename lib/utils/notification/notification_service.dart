@@ -153,7 +153,8 @@ class NotificationService {
       final reminderTime = dueDate.add(todo.reminder!);
       // Trừ 10 phút từ thời gian reminder
       final scheduledTime = reminderTime.subtract(const Duration(minutes: 10));
-
+      log(scheduledTime.toString());
+      log(tz.TZDateTime.parse(tz.local, scheduledTime.toString()).toString());
       await flutterLocalNotificationsPlugin.zonedSchedule(
         todo.id!, // ID của thông báo, có thể là ID của Todo
         todo.title, // Tiêu đề của thông báo

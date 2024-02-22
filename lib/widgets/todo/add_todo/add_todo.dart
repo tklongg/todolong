@@ -62,7 +62,7 @@ class _AddTodoState extends State<AddTodo> {
   void submit() {
     final todo = Todo(
         title: title,
-        description: description.isEmpty ? null : description,
+        description: description.isEmpty ? "" : description,
         dueDate: dueDate,
         reminder: reminder,
         priority: priority,

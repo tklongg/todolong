@@ -60,7 +60,7 @@ class _MyAppState extends State<MyApp> {
         child: const MaterialApp(
           title: 'todolong',
           // theme: _baseTheme,
-          // debugShowCheckedModeBanner: false,
+          debugShowCheckedModeBanner: false,
           home: MainScreen(),
         ));
   }

@@ -150,7 +150,14 @@ class TodoProvider extends ChangeNotifier {
     todo.addedDate = DateTime.now();
 
     if (todo.reminder != null) {
-      await NotificationService().addScheduledNotification(todo);
+      final reminderTime = todo.dueDate!.add(todo.reminder!);
+      // Trừ 10 phút từ thời gian reminder
+      final scheduledTime = reminderTime.subtract(const Duration(minutes: 10));
+      if (scheduledTime.isAfter(DateTime.now())) {
+        await NotificationService().addScheduledNotification(todo);
+      } else {
+        todo.reminder = null;
+      }
     }
     _todoList.add(todo);
     _saveTodos();
@@ -160,6 +167,26 @@ class TodoProvider extends ChangeNotifier {
   Future<void> updateTodo(int id, Todo updatedTodo) async {
     int index = _todoList.indexWhere((todo) => todo.id == id);
     if (index != -1) {
+      if (_todoList[index].reminder != updatedTodo.reminder) {
+        if (updatedTodo.reminder != null) {
+          final reminderTime = updatedTodo.dueDate!.add(updatedTodo.reminder!);
+          // Trừ 10 phút từ thời gian reminder
+          final scheduledTime =
+              reminderTime.subtract(const Duration(minutes: 10));
+          if (scheduledTime.isAfter(DateTime.now())) {
+            await NotificationService().adjustScheduleNotification(updatedTodo);
+          } else {
+            updatedTodo.reminder = _todoList[index].reminder;
+          }
+        } else {
+          await NotificationService().removeScheduledNotifications(id);
+        }
+      } else if (updatedTodo.dueDate != _todoList[index].dueDate &&
+          updatedTodo.dueDate!.isAfter(DateTime.now())) {
+        if (updatedTodo.reminder != null) {
+          await NotificationService().adjustScheduleNotification(updatedTodo);
+        }
+      }
       _todoList[index] = updatedTodo;
       NotificationService().adjustScheduleNotification(updatedTodo);
       _saveTodos();
